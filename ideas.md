@@ -8,6 +8,8 @@
 - Limit n -> infty of polynomials: showing how the non-leading terms go to zero
 - Solving the brachistochrone problem in segments
 - Slope fields generator
+- Monte Carlo calculate pi
+- That thing Alan Turing worked on with the spots and whatnot
 
 ## Coding
 - Python unit tests with `unittest`
