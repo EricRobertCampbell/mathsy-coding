@@ -10,6 +10,13 @@
 - Slope fields generator
 - Monte Carlo calculate pi
 - That thing Alan Turing worked on with the spots and whatnot
+- Sierpinski triangle:
+  - Cellular automata
+  - Random chance game
+  - Lindermayer systems
+  - Iterative affine transformations
+- Lindermayer systems
+- Creating a fern using iterated affine transformations
 
 ## Coding
 - Python unit tests with `unittest`
