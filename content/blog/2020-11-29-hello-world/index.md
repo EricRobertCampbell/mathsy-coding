@@ -1,6 +1,6 @@
 ---
 title: Hello, World!
-data: 2020-11-29
+date: 2020-11-29
 description: Hello, World!
 ---
 
