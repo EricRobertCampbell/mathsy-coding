@@ -29,3 +29,4 @@
 - Testing commit actions
 - Auth0 token hook with `[token, setToken, tokenState]`
 - Creating the Google Autocomplete Material component
+- Chapter discussions from "Clean Code"
