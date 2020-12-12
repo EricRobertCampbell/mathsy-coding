@@ -30,3 +30,4 @@
 - Auth0 token hook with `[token, setToken, tokenState]`
 - Creating the Google Autocomplete Material component
 - Chapter discussions from "Clean Code"
+- How to create some testing functions for Material-UI components - the process; opening menus, manipulating sliders, finding the different components, &c.
