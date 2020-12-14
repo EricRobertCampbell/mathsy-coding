@@ -1,0 +1,25 @@
+$ python -m unittest test_some_functions.py
+
+F.F.
+======================================================================
+FAIL: test_errors_on_non_numbers (test_some_functions.TestAdd)
+When fed a non-number, it should raise a TypeError
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/eric/documents/backend-testing-tutorial/simple-testing/test_some_functions.py", line 27, in test_errors_on_non_numbers
+    add(first, second)
+AssertionError: TypeError not raised
+
+======================================================================
+FAIL: test_works_with_floats (test_some_functions.TestAdd)
+Should correctly add floats
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/eric/documents/backend-testing-tutorial/simple-testing/test_some_functions.py", line 19, in test_works_with_floats
+    self.assertEqual(add(0.1, 0.2), 0.3, f"")
+AssertionError: 0.30000000000000004 != 0.3 : 
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.005s
+
+FAILED (failures=2)
