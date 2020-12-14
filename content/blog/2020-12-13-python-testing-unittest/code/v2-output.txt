@@ -1,0 +1,15 @@
+$ python -m unittest --verbose test_some_functions.py
+
+test_errors_on_non_numbers (test_some_functions.TestAdd)
+When fed a non-number, it should raise a TypeError ... ok
+test_returns_number (test_some_functions.TestAdd)
+Should return a number ... ok
+test_works_with_floats (test_some_functions.TestAdd)
+Should correctly add floats ... ok
+test_works_with_ints (test_some_functions.TestAdd)
+Should correctly add integers ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
