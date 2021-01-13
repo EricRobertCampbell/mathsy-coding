@@ -19,7 +19,6 @@
 - Creating a fern using iterated affine transformations
 
 ## Coding
-- Python unit tests with `unittest`
 - Python Django testing
 - Python Graphene testing
 - Javascript testing with Jest
@@ -31,3 +30,4 @@
 - Creating the Google Autocomplete Material component
 - Chapter discussions from "Clean Code"
 - How to create some testing functions for Material-UI components - the process; opening menus, manipulating sliders, finding the different components, &c.
+- Testing a Redux store with slices
