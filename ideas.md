@@ -17,6 +17,7 @@
   - Iterative affine transformations
 - Lindermayer systems
 - Creating a fern using iterated affine transformations
+- Spotify API - does artists' popularity seem to follow a power law? If so, what does the base seem to say about the artists themselves?
 
 ## Coding
 - Python Django testing
