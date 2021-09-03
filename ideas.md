@@ -18,6 +18,8 @@
 - Lindermayer systems
 - Creating a fern using iterated affine transformations
 - Spotify API - does artists' popularity seem to follow a power law? If so, what does the base seem to say about the artists themselves?
+- Bollinger bands
+- ARIMA (AutoRegressive Integrated Moving Average)
 
 ## Coding
 - Python Django testing
@@ -32,3 +34,5 @@
 - Chapter discussions from "Clean Code"
 - How to create some testing functions for Material-UI components - the process; opening menus, manipulating sliders, finding the different components, &c.
 - Testing a Redux store with slices
+
+## Done
