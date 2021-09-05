@@ -5,8 +5,7 @@ on:
       - opened
       - edited
   schedule:
-    # https://crontab.guru/every-hour
-    - cron: 0 8 * * *
+    - cron 0 8 * * *
 jobs:
   merge_schedule:
     runs-on: ubuntu-latest
