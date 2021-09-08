@@ -54,7 +54,7 @@ To test these, create a file `test_some_functions.py` in the same directory as `
 To run the tests, type the following:
 `embed:code/v1-output.txt`
 
- Note that in the output for `unittest`, a passing test is indicated with a full stop and a failing one with an `E`.
+ Note that in the output for `unittest`, a passing test is indicated with a full stop and a failing one with an `F`. In the even that an unhandled error is thrown during a test, it will be indicated with an `E`.
  
  Oh no! There are two failing tests! Note the information present in the output. The two failing tests indicate two problems - one with the actual function under test, and one with the tests themselves.
  
