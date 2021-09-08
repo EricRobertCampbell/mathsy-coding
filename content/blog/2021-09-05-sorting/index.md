@@ -1,6 +1,6 @@
 ---
 title: Sorting By Multiple Criteria in JavaScript
-date:
+date: 2021-09-05
 description: A function to sort by multiple simultaneous criteria in JavaScript
 ---
 
