@@ -99,6 +99,30 @@ $$
 
 And there we have it! The sample variance is an unbiased estimator for the variance.
 
+
+## Implementations for the Sample Variance: JavaScript, Python, R
+
+Now that we've looked at the mathematics behind this, let's look at how we can write a function for the sample variance in JavaScript, Python, and R:
+
+### In JavaScript
+`embed:./resources/inJavascript.js`
+
+Output:
+`embed:resources/inJavascript-output.txt`
+
+### In Python
+`embed:./resources/in_python.py`
+
+Output:
+`embed:resources/in_python-output.txt`
+
+### In R
+`embed:./resources/inR.R`
+
+Output:
+`embed:resources/inR-output.txt`
+
+
 ## Conclusions
 
 Above, I've presented unbiased estimators for the mean $\mu$ and variance $\sigma^2$ of a distribution. With these, given independent samples from a distribution, we can provide point estimates for these parameters. However, there are some questions left to ask and things to note. For instance, we might assume that since the sample variance is an unbiased estimator of the variance, $s = \sqrt{\frac{\sum_{i=1}^n (X_i - \overline{X}) }{n-1}}$ would be an unbiased estimator of the standard deviation. [However, this is not the case.](https://en.wikipedia.org/wiki/Unbiased_estimation_of_standard_deviation) 
