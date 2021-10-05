@@ -76,3 +76,6 @@ yarn-error.log
 __pycache__
 __init__.py
 venv/
+
+# Zone Identifiers
+*:Zone.Identifier
