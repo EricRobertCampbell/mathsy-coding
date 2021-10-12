@@ -20,6 +20,7 @@
 - Spotify API - does artists' popularity seem to follow a power law? If so, what does the base seem to say about the artists themselves?
 - Bollinger bands
 - ARIMA (AutoRegressive Integrated Moving Average)
+- Sand pile simulation [based on this article](https://nautil.us/issue/107/the-edge/the-math-of-the-amazing-sandpile?utm_source=pocket-newtab)
 
 ## Coding
 - Python Django testing
