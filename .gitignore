@@ -69,8 +69,8 @@ yarn-error.log
 .yarn-integrity
 
 # vim swap files
-.swp
-.swo
+*.swp
+*.swo
 
 # python nonsense
 __pycache__

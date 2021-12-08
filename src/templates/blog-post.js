@@ -1,16 +1,16 @@
-import React from "react"
-import { Link, graphql } from "gatsby"
+import React from "react";
+import { Link, graphql } from "gatsby";
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Bio from "../components/bio";
+import Layout from "../components/layout";
+import SEO from "../components/seo";
 
-require(`gatsby-remark-mathjax-ssr/mathjax.css`)
+require(`gatsby-remark-mathjax-ssr/mathjax.css`);
 
 const BlogPostTemplate = ({ data, location }) => {
-	const post = data.markdownRemark
-	const siteTitle = data.site.siteMetadata?.title || `Title`
-	const { previous, next } = data
+	const post = data.markdownRemark;
+	const siteTitle = data.site.siteMetadata?.title || `Title`;
+	const { previous, next } = data;
 
 	return (
 		<Layout location={location} title={siteTitle}>
@@ -18,6 +18,10 @@ const BlogPostTemplate = ({ data, location }) => {
 				title={post.frontmatter.title}
 				description={post.frontmatter.description || post.excerpt}
 			/>
+			<script
+				src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+				async
+			></script>
 			<article
 				className="blog-post"
 				itemScope
@@ -63,10 +67,10 @@ const BlogPostTemplate = ({ data, location }) => {
 				</ul>
 			</nav>
 		</Layout>
-	)
-}
+	);
+};
 
-export default BlogPostTemplate
+export default BlogPostTemplate;
 
 export const pageQuery = graphql`
 	query BlogPostBySlug(
@@ -106,4 +110,4 @@ export const pageQuery = graphql`
 			}
 		}
 	}
-`
+`;
