@@ -47,10 +47,10 @@ module.exports = {
 							wrapperStyle: `margin-bottom: 1.0725rem`,
 						},
 					},
-					// {
-					// 	resolve: `gatsby-remark-mathjax-ssr`,
-					// 	options: {},
-					// },
+					{
+						resolve: `gatsby-remark-mathjax-ssr`,
+						options: {},
+					},
 					`gatsby-remark-prismjs`,
 					`gatsby-remark-copy-linked-files`,
 					`gatsby-remark-smartypants`,
