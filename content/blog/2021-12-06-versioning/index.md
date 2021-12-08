@@ -132,7 +132,7 @@ Then you should see the following output.
 
 And now take a look at `CHANGELOG.md`!
 
-`embed:./resources/first-changelog.md`
+`embed:./resources/first-changelog.md.example`
 
 First of all, it's great the we can see exactly what changes (and of what type!) occurred during each version change. Notice as well that `standard-version` used our commits to create the changelog - if we had included a body to the commit, that would have appeared here as well.
 
