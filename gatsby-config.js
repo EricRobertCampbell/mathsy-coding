@@ -47,14 +47,14 @@ module.exports = {
 							wrapperStyle: `margin-bottom: 1.0725rem`,
 						},
 					},
-					{
-						resolve: `gatsby-remark-mathjax-ssr`,
-						options: {},
-					},
+					// {
+					// 	resolve: `gatsby-remark-mathjax-ssr`,
+					// 	options: {},
+					// },
 					`gatsby-remark-prismjs`,
 					`gatsby-remark-copy-linked-files`,
 					`gatsby-remark-smartypants`,
-					`gatsby-remark-mathjax`,
+					// `gatsby-remark-mathjax`,
 				],
 			},
 		},
@@ -84,4 +84,4 @@ module.exports = {
 		// To learn more, visit: https://gatsby.dev/offline
 		// `gatsby-plugin-offline`,
 	],
-}
+};
