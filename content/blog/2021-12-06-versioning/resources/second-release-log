@@ -1,0 +1,10 @@
+
+> versioning-sample-project@1.0.0 release
+> standard-version
+
+✔ bumping version in package.json from 1.0.0 to 1.1.0
+✔ bumping version in package-lock.json from 1.0.0 to 1.1.0
+✔ outputting changes to CHANGELOG.md
+✔ committing package-lock.json and package.json and CHANGELOG.md
+✔ tagging release v1.1.0
+ℹ Run `git push --follow-tags origin master && npm publish` to publish
