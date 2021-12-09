@@ -18,10 +18,6 @@ const BlogPostTemplate = ({ data, location }) => {
 				title={post.frontmatter.title}
 				description={post.frontmatter.description || post.excerpt}
 			/>
-			<script
-				src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
-				async
-			></script>
 			<article
 				className="blog-post"
 				itemScope
