@@ -5,7 +5,7 @@ import Bio from "../components/bio";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 
-require(`gatsby-remark-mathjax-ssr/mathjax.css`);
+// require(`gatsby-remark-mathjax-ssr/mathjax.css`);
 
 const BlogPostTemplate = ({ data, location }) => {
 	const post = data.markdownRemark;

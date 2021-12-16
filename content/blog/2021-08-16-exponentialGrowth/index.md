@@ -17,7 +17,7 @@ $$
 Using separation of variables and assuming that $P(0) = P_0$, we can find a closed-form solution:
 
 $$
-\begin{align}
+\begin{align*}
 \frac{dP}{dt} &= k P(t) \\
 \int \frac{1}{P(t)} dP &= \int k dt  \\
 \ln |P(t)| &= kt + C \\
@@ -27,7 +27,7 @@ P(t) &= e ^ {kt + C} \qquad \text{(Assuming P(t) > 0)} \\
 P_0 &= A e^ {k \ast 0} \\
 P_0 &= A \\
 \therefore P(t) &= P_0 e ^ {kt}
-\end{align}
+\end{align*}
 $$
 
 ## Discrete Case
@@ -45,14 +45,14 @@ So that proves it then!
 Now let's take a look at how we can switch back and forth between these models. One case where we might want to do this if if the population if changing continuously, but we can only sample it discretely - for instance, we might only be able to check the population size once a year. Our data are discrete, even though the underlying phenomenon isn't. If we do this, we'll find a (discrete) $k_d$, but we want to convert it to a continuous $k_c$. It turns out that doing so isn't too difficult:
 
 $$
-\begin{align}
+\begin{align*}
 P_{t + 1} &= k_d P_t \\
 \frac{P_{t + 1}}{P_t} &= k_d \\
 \frac{P_0 e^{k_c(t + 1)}}{P_0 e^{k_c t}} &= k_d \\
 \frac{P_0 e ^{k_c t} e^{ k_c }}{P_0 e^{ k_c t }} &= k_d \\
 e^{k_c} &= k_d \\
 k_c &= \ln k_d
-\end{align}
+\end{align*}
 $$
 
 Now let's double-check our math graphically. Let's say we check a population of mice once a year, and find that each year the population is twice that of the previous year. That means that $k_d = 2$, and so $k_c = \ln 2 \approx 0.693\dots$. If we plot the population growing discretely with $k_d = 2$ and continuously with $k_c = \ln 2$, we should find that the plots coincide. Plotting was done using MatPlotLib.
