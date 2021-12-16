@@ -47,7 +47,6 @@ module.exports = {
 							wrapperStyle: `margin-bottom: 1.0725rem`,
 						},
 					},
-					`gatsby-remark-mathjax`,
 					{
 						resolve: `gatsby-remark-mathjax-ssr`,
 						options: {},
