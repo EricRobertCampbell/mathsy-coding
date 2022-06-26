@@ -1,0 +1,13 @@
+  message: 'The solver successfully reached the end of the integration interval.'
+     nfev: 32
+     njev: 0
+      nlu: 0
+      sol: None
+   status: 0
+  success: True
+        t: array([0.        , 0.10001999, 1.06609106, 2.30431769, 3.64528981,
+       5.        ])
+ t_events: None
+        y: array([[  1.        ,   1.10519301,   2.9040598 ,  10.01740317,
+         38.29174533, 148.39440874]])
+ y_events: None
