@@ -1,7 +1,7 @@
 ---
 title: Bayesian Ranking
 date: 2022-10-03
-description: Developing a way to assess the quality of playes given the results of the games that they play
+description: Developing a way to assess the quality of players given the results of the games that they play
 ---
 
 The purpose of this is to construct some sort of ranking given a series of pairwise comparisons, as well as an extension where the data is presented not as a series of one-on-one contests, but as a ranked order instead.
@@ -137,6 +137,6 @@ So there we have it! In this post we examined how to develop a ranking of player
 
 ## Bibliography and Sources
 
-- [Learning to Rank the Bayesian Way - Dr. Robert Kubler](https://towardsdatascience.com/learning-to-rank-the-bayesian-way-29af4c61939b)
-- [Bradley-Terry Model - Wikipedia](https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model)
-- [Bernoulli distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution)
+-   [Learning to Rank the Bayesian Way - Dr. Robert Kubler](https://towardsdatascience.com/learning-to-rank-the-bayesian-way-29af4c61939b)
+-   [Bradley-Terry Model - Wikipedia](https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model)
+-   [Bernoulli distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution)
