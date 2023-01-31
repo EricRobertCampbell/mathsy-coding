@@ -235,6 +235,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2023-05-01-harvesting-methods/index.md": {
+  id: "2023-05-01-harvesting-methods/index.md",
+  slug: "2023-05-01-harvesting-methods",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
