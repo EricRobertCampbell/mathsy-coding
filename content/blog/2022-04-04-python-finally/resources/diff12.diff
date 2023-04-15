@@ -1,9 +1,0 @@
- def process_person(person: Person):
-     """ This does something """
--    return person.get_id()
-+    try:
-+        return person.get_id()
-+    except Exception as e:
-+        print(f"Error calling do_something for Person {person.first_name} {person.last_name}:", e)
-+    return None
- 
