@@ -1,0 +1,10 @@
+.:
+index.html
+scripts
+styling
+
+./scripts:
+script.js
+
+./styling:
+style.css

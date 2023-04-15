@@ -1,15 +1,5 @@
 declare module 'astro:content' {
 	interface Render {
-		'.mdx': Promise<{
-			Content: import('astro').MarkdownInstance<{}>['Content'];
-			headings: import('astro').MarkdownHeading[];
-			remarkPluginFrontmatter: Record<string, any>;
-		}>;
-	}
-}
-
-declare module 'astro:content' {
-	interface Render {
 		'.md': Promise<{
 			Content: import('astro').MarkdownInstance<{}>['Content'];
 			headings: import('astro').MarkdownHeading[];
@@ -112,41 +102,139 @@ declare module 'astro:content' {
 
 	const entryMap: {
 		"blog": {
-"first-post.md": {
-  id: "first-post.md",
-  slug: "first-post",
+"2020-11-29-hello-world/index.md": {
+  id: "2020-11-29-hello-world/index.md",
+  slug: "2020-11-29-hello-world",
   body: string,
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
-"markdown-style-guide.md": {
-  id: "markdown-style-guide.md",
-  slug: "markdown-style-guide",
+"2020-12-13-python-testing-unittest/index.md": {
+  id: "2020-12-13-python-testing-unittest/index.md",
+  slug: "2020-12-13-python-testing-unittest",
   body: string,
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
-"second-post.md": {
-  id: "second-post.md",
-  slug: "second-post",
+"2021-08-16-exponentialGrowth/index.md": {
+  id: "2021-08-16-exponentialGrowth/index.md",
+  slug: "2021-08-16-exponentialgrowth",
   body: string,
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
-"third-post.md": {
-  id: "third-post.md",
-  slug: "third-post",
+"2021-09-05-sorting/index.md": {
+  id: "2021-09-05-sorting/index.md",
+  slug: "2021-09-05-sorting",
   body: string,
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
-"using-mdx.mdx": {
-  id: "using-mdx.mdx",
-  slug: "using-mdx",
+"2021-10-04-chart-js/index.md": {
+  id: "2021-10-04-chart-js/index.md",
+  slug: "2021-10-04-chart-js",
   body: string,
   collection: "blog",
   data: InferEntrySchema<"blog">
-} & { render(): Render[".mdx"] },
+} & { render(): Render[".md"] },
+"2021-11-01-unbiased-estimation/index.md": {
+  id: "2021-11-01-unbiased-estimation/index.md",
+  slug: "2021-11-01-unbiased-estimation",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2021-12-06-versioning/index.md": {
+  id: "2021-12-06-versioning/index.md",
+  slug: "2021-12-06-versioning",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2022-04-04-python-finally/index.md": {
+  id: "2022-04-04-python-finally/index.md",
+  slug: "2022-04-04-python-finally",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2022-05-02-bayesian-update-problem/index.md": {
+  id: "2022-05-02-bayesian-update-problem/index.md",
+  slug: "2022-05-02-bayesian-update-problem",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2022-07-04-solving-odes-with-python/index.md": {
+  id: "2022-07-04-solving-odes-with-python/index.md",
+  slug: "2022-07-04-solving-odes-with-python",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2022-08-01-curve-fitting/index.md": {
+  id: "2022-08-01-curve-fitting/index.md",
+  slug: "2022-08-01-curve-fitting",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2022-09-05-binomialUpdate/index.md": {
+  id: "2022-09-05-binomialUpdate/index.md",
+  slug: "2022-09-05-binomialupdate",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2022-10-03-ranking/index.md": {
+  id: "2022-10-03-ranking/index.md",
+  slug: "2022-10-03-ranking",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2022-11-07-decorators/index.md": {
+  id: "2022-11-07-decorators/index.md",
+  slug: "2022-11-07-decorators",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2022-12-05-inferring-extinction/index.md": {
+  id: "2022-12-05-inferring-extinction/index.md",
+  slug: "2022-12-05-inferring-extinction",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2023-01-02-graphql-cypress/index.md": {
+  id: "2023-01-02-graphql-cypress/index.md",
+  slug: "2023-01-02-graphql-cypress",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2023-02-06-labelling-ggplot/index.md": {
+  id: "2023-02-06-labelling-ggplot/index.md",
+  slug: "2023-02-06-labelling-ggplot",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2023-03-06-solving-ivps-with-desolve/index.md": {
+  id: "2023-03-06-solving-ivps-with-desolve/index.md",
+  slug: "2023-03-06-solving-ivps-with-desolve",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2023-04-03-logistic-growth/index.md": {
+  id: "2023-04-03-logistic-growth/index.md",
+  slug: "2023-04-03-logistic-growth",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
