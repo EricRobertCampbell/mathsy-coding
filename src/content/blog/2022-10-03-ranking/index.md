@@ -2,6 +2,8 @@
 title: Bayesian Ranking
 pubDate: 2022-10-03
 description: Developing a way to assess the quality of players given the results of the games that they play
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 The purpose of this is to construct some sort of ranking given a series of pairwise comparisons, as well as an extension where the data is presented not as a series of one-on-one contests, but as a ranked order instead.
@@ -16,8 +18,27 @@ $$
 
 Let's take a look at the graph:
 
-![The Logistic Curve](./resources/logistic_curve.png)
-`embed:./resources/plot_logistic.py`
+![The Logistic Curve](/src/content/blog/2022-10-03-ranking/resources/logistic_curve.png)
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig, ax = plt.subplots()
+diffs = np.linspace(-7, 7, 201)
+probs = 1 / (1 + np.exp(-diffs))
+ax.plot(diffs, probs) # the logistic curve
+
+# This is to illustrate the when the qualities are the same (difference is 0), there is a probability of 0.5 of victory
+ax.plot([-7, 0], [0.5, 0.5], 'g--')
+ax.plot([0, 0], [0.5, 0], 'g--')
+
+ax.set_yticks(np.linspace(0, 1, 11))
+ax.set_xlabel("Difference in Quality $q_i - q_j$")
+ax.set_ylabel("Probability of Player $i$'s Victory")
+fig.suptitle("Player $i$ Against Player $j$")
+fig.savefig('logistic_curve.png', dpi=400)
+```
 
 For the diagram, we can see that this way of calculating the probability of victory is at least reasonable. If player $i$ is much better than player $j$ (difference is large and positive), then the proability of their victory is close to 1, as you would expect. Similarly, if player $i$ is much worse that player $j$ (difference is large but negative), then the probability of their victory is close to zero. Finally, if the two players are equally matched (difference is 0), then the probability of victory is $50\%$.
 
@@ -39,7 +60,60 @@ Each game between players $i$ and $j$ is a [Bernoulli trial](https://en.wikipedi
 
 For this first implementation, let's assume that we have three players with qualities 1, 0, and -1. Each player will play 100 games against each other player. We'll generate the data, implement that model, then graph the results to see if we can recover the initial results.
 
-`embed:./resources/initial_ranking_model.py`
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import pymc as pm
+from scipy.stats import bernoulli, gaussian_kde
+
+# player name : quality
+qualities = dict(A=1, B=0, C=-1)
+players = list(qualities.keys())
+num_games = 100
+
+data = pd.DataFrame({"Player i":[], "Player j": [], "result": []})
+for player_i in players:
+    for player_j in players[players.index(player_i) + 1:]:
+        prob_victory = 1 / (1 + np.exp(-(qualities[player_i] - qualities[player_j])))
+        new_results = pd.DataFrame({"Player i": [player_i] * num_games, "Player j": [player_j] * num_games, "result": bernoulli.rvs(prob_victory, size=num_games)})
+        data = pd.concat([data, new_results], ignore_index=True)
+
+# convert the names of the players to their index - this is for the PyMC model we're about to use
+data["Player i index"] = data.apply(lambda row: players.index(row["Player i"]), axis=1)
+data["Player j index"] = data.apply(lambda row: players.index(row["Player j"]), axis=1)
+
+# Now the model implementation
+with pm.Model() as rank_model:
+    quality = pm.Normal("quality", mu=0, sigma=1, shape=3)
+    diffs = quality[data["Player i index"]] - quality[data["Player j index"]]
+    prob_win = pm.math.sigmoid(diffs)
+    results = pm.Bernoulli("results", prob_win, observed=data["result"])
+    trace = pm.sample(tune=1000, return_inferencedata=False)
+
+#Now let's plot these to see if we get the expected results:
+
+quality_samples = trace.get_values("quality")
+quality_samples.shape
+samples = [[], [], []] # player 1, player 2, player 3
+for index in [0, 1, 2]:
+    for draw in quality_samples:
+        samples[index].append(draw[index])
+kdes = [gaussian_kde(collected_samples) for collected_samples in samples]
+
+fig, ax = plt.subplots()
+qs = np.linspace(-3, 3, 201)
+for index, kde in enumerate(kdes):
+    results = kde(qs)
+    ax.plot(qs, results, label=f"{players[index]} - Quality {qualities[players[index]]}")
+for player_quality in qualities.values():
+    ax.axvline(player_quality, color="black", linestyle='--')
+ax.set_xlabel("Quality")
+ax.set_ylabel("Probability Density")
+fig.suptitle("Ranking Results")
+fig.legend(framealpha=1)
+fig.savefig('initial_ranking.png', dpi=400)
+```
 
     Auto-assigning NUTS sampler...
     Initializing NUTS using jitter+adapt_diag...
@@ -69,7 +143,7 @@ For this first implementation, let's assume that we have three players with qual
 
     Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 7 seconds.
 
-![Results of recovering the initial player qualities](./resources/initial_ranking.png)
+![Results of recovering the initial player qualities](/src/content/blog/2022-10-03-ranking/resources/initial_ranking.png)
 
 From this, we can see that our model is doing a good job of finding the original values. It looks like our method works!
 
@@ -97,7 +171,69 @@ def ranking_to_individual_games(ranking: List[str]) -> pd.DataFrame:
 
 Again, let's generate some data to see if our model is strong enough to recover the initial values. In order to do so, we will generate some rankings from players with a known (but not fixed) quality. Just as in the last case, we'll generate the data, run the model, and the graph the results to see if we can recover the initial data.
 
-`embed:./resources/ranking_from_ranked_order.py`
+```python
+import numpy as np
+import matplotlib.pylab as plt
+import pandas as pd
+import pymc as pm
+from scipy.stats import norm, gaussian_kde
+from typing import List
+
+def ranking_to_individual_games(ranking: List[str]) -> pd.DataFrame:
+    """ Returns a DataFrame with columns 'Player i', 'Player j', and 'result' """
+    data = pd.DataFrame({"Player i": [], "Player j": [], "result": []})
+    for player_i in ranking:
+        for player_j in ranking[ranking.index(player_i) + 1:]:
+            new_row = pd.DataFrame({"Player i": [player_i], "Player j": [player_j], "result": [1]})
+            data = pd.concat([data, new_row], ignore_index=True)
+    return data
+
+# these are now distributions because we're going to draw from them later to determine the rank order for a given "judgement"
+qualities = dict(A=norm(1, 1), B=norm(0, 1), C=norm(-1, 1))
+players = list(qualities.keys())
+num_rankings = 1000
+
+all_rankings = []
+for _ in range(num_rankings):
+    results = {player: qualities[player].rvs() for player in qualities}
+    ranking = sorted(results, key=results.get, reverse=True)
+    all_rankings.append(ranking)
+
+# now generate the individual games
+games_data = pd.DataFrame()
+for ranking in all_rankings:
+    games_data = pd.concat([games_data, ranking_to_individual_games(ranking)], ignore_index=True)
+
+# convert the names of the players to their index (again)
+games_data["Player i index"] = games_data.apply(lambda row: players.index(row["Player i"]), axis=1)
+games_data["Player j index"] = games_data.apply(lambda row: players.index(row["Player j"]), axis=1)
+
+with pm.Model() as ranking_model:
+    quality = pm.Normal("quality", mu=0, sigma=1, shape=3)
+    diffs = quality[games_data["Player i index"]] - quality[games_data["Player j index"]]
+    prob_win = pm.math.sigmoid(diffs)
+    results = pm.Bernoulli("results", prob_win, observed=games_data["result"])
+    trace = pm.sample(tune=1000, return_inferencedata=False)
+
+quality_samples = trace.get_values("quality")
+samples = [[], [], []]
+for index in [0, 1, 2]:
+    for draw in quality_samples:
+        samples[index].append(draw[index])
+kdes = [gaussian_kde(collected_samples) for collected_samples in samples]
+
+# again, graph the results
+fig, ax = plt.subplots()
+qs = np.linspace(-3, 3, 201)
+for index, kde in enumerate(kdes):
+    results = kde(qs)
+    ax.plot(qs, results, label=players[index])
+ax.set_xlabel("Quality")
+ax.set_ylabel("Probability Density")
+fig.suptitle("Ranking Results")
+fig.legend(framealpha=1)
+fig.savefig('ranking_from_ranked_data.png', dpi=400)
+```
 
     Auto-assigning NUTS sampler...
     Initializing NUTS using jitter+adapt_diag...
@@ -127,7 +263,7 @@ Again, let's generate some data to see if our model is strong enough to recover 
 
     Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 7 seconds.
 
-![Quality Results from Ranked Order](./resources/ranking_from_ranked_data.png)
+![Quality Results from Ranked Order](/src/content/blog/2022-10-03-ranking/resources/ranking_from_ranked_data.png)
 
 Once again, our model was able to recover the initial values with a high degree of fidelity, although the results are somewhat more dispersed around the true values then when we had the individual games.
 

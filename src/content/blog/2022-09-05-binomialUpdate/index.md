@@ -2,6 +2,8 @@
 title: Simple Bayesian Update - Three Methods
 pubDate: 2022-09-05
 description: Solving a simply binomial update problem using a grid method, MCMC, and a conjugate prior
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 ## Introduction
@@ -31,8 +33,27 @@ $$
 
 The actual numbers we choose somehow reflect our level of conviction. Visually, we can see this if we plot various beta distributions where the ratio of successes / trials is the same but the actual values are different:
 
-![Different Beta distributions reflecting different levels of certainty](./resources/differentBetas.png)
-`embed:./resources/differentBetas.py`
+![Different Beta distributions reflecting different levels of certainty](/src/content/blog/2022-09-05-binomialUpdate/resources/differentBetas.png)
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import beta
+
+ps = np.linspace(0, 1, 101)
+
+fig, ax = plt.subplots()
+ax.set_xlabel("$p$")
+ax.set_ylabel("Probability Density")
+for alpha_param, beta_param in [(num_successes + 1, num_failures + 1) for num_successes, num_failures in [(2 * k, 1 * k) for k in range(1, 6)]]:
+    ax.plot(ps, beta(alpha_param, beta_param).pdf(ps), label=f"Beta({alpha_param}, {beta_param})")
+ax.axvline(x=2/3, linestyle="--")
+ax.annotate(r"$\frac{2}{3}$", xy=(2/3, 0.5), xytext=(0.5, 0.5), arrowprops=dict(arrowstyle="->"))
+fig.legend(loc="center right")
+fig.suptitle(f"Beta Distributions With Maximum Values at 2/3")
+fig.savefig("differentBetas.png", dpi=400)
+```
 
 Thus, our choice of $\text{Beta}(3,2)$ indicates that I think that the value of $p$ is about 2/3, but I am not very confident. If I wanted I could actually use non-integer values to indicate even more uncertainty, but this should be enough for now.
 
@@ -40,8 +61,36 @@ Thus, our choice of $\text{Beta}(3,2)$ indicates that I think that the value of 
 
 So now we can use our first method to approximate our final distribution of the propportion $p$ of water on the Earth's surface - a grid approximation. For this, we will evaluate our prior and likelihood at a number of potential values for $p$, and then multiply them together. If we choose a sufficiently large number of points, our approximation should be a good one!
 
-![Prior and posterior - grid approximation](./resources/grid.png)
-`embed:./resources/gridApproximation.py`
+![Prior and posterior - grid approximation](/src/content/blog/2022-09-05-binomialUpdate/resources/grid.png)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import binom, beta
+
+ps = np.linspace(0, 1, 101)
+alpha_param = 3
+beta_param = 2
+prior = beta(alpha_param, beta_param).pdf(ps)
+likelihood = binom(n=10, p=ps).pmf(7)
+posterior = prior * likelihood # unnormalized
+posterior = posterior / np.sum(posterior) # normalized
+
+max_posterior = np.max(posterior) # probability mass
+max_posterior_index = np.argmax(posterior)
+
+fig, ax = plt.subplots()
+ax.set_xlabel("$p$")
+ax.set_ylabel("Probability density")
+ax.plot(ps, prior / np.sum(prior), label="Prior")
+ax.plot(ps, posterior, label="Posterior")
+ax.axvline(x=2/3, linestyle="--")
+ax.annotate(r"$\frac{2}{3}$", xy=(2/3, 0.005), xytext=(0.55, 0.003), arrowprops=dict(arrowstyle='->'))
+ax.annotate(f"Posterior max at {ps[max_posterior_index]:.2f}", xytext=(0.2, 0.03), xy=(ps[max_posterior_index], max_posterior), arrowprops=dict(arrowstyle="->"))
+fig.legend()
+fig.suptitle("Prior and Posterior Distributions of $p$ (Grid)")
+fig.savefig("grid.png", dpi=400)
+```
 
 So we can see that with the addition of our data, we have shifted the maximum slightly and increased our confidence (decreased the spread / variance) quite a bit!
 
@@ -62,8 +111,48 @@ Where $k$ is the observed number of "water" hits (7), and $p$ is the true propor
 
 In order to construct our estimate, we will use [PyMC](https://www.pymc.io/welcome.html). We will write down our model almost exactly the way it appears above, run it, and sample from the results.
 
-![Markov Chain Monte Carlo Results](./resources/mcmc.png)
-`embed:./resources/mcmc.py`
+![Markov Chain Monte Carlo Results](/src/content/blog/2022-09-05-binomialUpdate/resources/mcmc.png)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import pymc as pm
+
+from scipy.stats import gaussian_kde, beta
+
+ps = np.linspace(0, 1, 101)
+prior = beta(3, 2).pdf(ps)
+n = 10
+observed_k = 7
+
+with pm.Model() as model:
+    p = pm.Beta("p", alpha=3, beta=2)
+    k = pm.Binomial("k", p=p, n=n, observed=observed_k)
+    samples = pm.sample(tune=2000)
+
+
+combined_samples = []
+for samples_chain in samples.posterior['p']:
+    combined_samples.extend(samples_chain)
+sample_distribution = gaussian_kde(combined_samples)
+
+posterior = sample_distribution.pdf(ps) #unnormalized
+posterior = posterior / np.sum(posterior) #normalized
+max_posterior_index = np.argmax(posterior)
+max_posterior = np.max(posterior)
+
+fig, ax = plt.subplots()
+ax.set_xlabel("$p$")
+ax.set_ylabel("Probability density")
+ax.plot(ps, prior / np.sum(prior), label="Prior")
+ax.plot(ps, posterior, label="Posterior")
+ax.axvline(x=2/3, linestyle="--")
+ax.annotate(r"$\frac{2}{3}$", xy=(2/3, 0.005), xytext=(0.55, 0.003), arrowprops=dict(arrowstyle='->'))
+ax.annotate(f"Posterior max at {ps[max_posterior_index]:.2f}", xytext=(0.2, 0.03), xy=(ps[max_posterior_index], max_posterior), arrowprops=dict(arrowstyle="->"))
+fig.legend()
+fig.suptitle("Prior and Posterior Distributions of $p$ (MCMC)")
+fig.savefig("mcmc.png", dpi=400)
+```
 
     Auto-assigning NUTS sampler...
     Initializing NUTS using jitter+adapt_diag...
@@ -114,15 +203,41 @@ Which is proportional to $\text{Beta}(k+\alpha, n-k+\beta)$. Here we're being ve
 
 From this result, we should be able to get the prior analytically:
 
--   $\alpha = 3$
--   $\beta = 2$
--   $n = 10$
--   $k = 7$
+- $\alpha = 3$
+- $\beta = 2$
+- $n = 10$
+- $k = 7$
 
 So the posterior should be $\text{Beta}(7 + 3, 10 - 7 + 2) = \text{Beta}(10, 5)$.
 
-![Using a conjugate prior](./resources/conjugatePrior.png)
-`embed:./resources/conjugatePrior.py`
+![Using a conjugate prior](/src/content/blog/2022-09-05-binomialUpdate/resources/conjugatePrior.png)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import beta
+
+ps = np.linspace(0, 1, 101)
+prior = beta(3, 2).pdf(ps)
+
+posterior = beta(10, 5).pdf(ps) # unnormalized
+posterior = posterior / np.sum(posterior) # normalized
+
+max_posterior_index = np.argmax(posterior)
+max_posterior = np.max(posterior)
+
+fig, ax = plt.subplots()
+ax.set_xlabel("$p$")
+ax.set_ylabel("Probability density")
+ax.plot(ps, prior / np.sum(prior), label="Prior")
+ax.plot(ps, posterior, label="Posterior")
+ax.axvline(x=2/3, linestyle="--")
+ax.annotate(r"$\frac{2}{3}$", xy=(2/3, 0.005), xytext=(0.55, 0.003), arrowprops=dict(arrowstyle='->'))
+ax.annotate(f"Posterior max at {ps[max_posterior_index]:.2f}", xytext=(0.2, 0.03), xy=(ps[max_posterior_index], max_posterior), arrowprops=dict(arrowstyle="->"))
+fig.legend(bbox_to_anchor=(0.95, 0.8))
+fig.suptitle("Prior and Posterior Distributions of $p$ (Conjugate)")
+fig.savefig("conjugatePrior.png", dpi=400)
+```
 
 Again, the results are similar. However, the process was certainly much easier!
 
@@ -138,10 +253,10 @@ We solved a simple problem in Bayesian statistic using three different methods: 
 
 ## Bibliography / Sources
 
--   [Analytics Vidhya - Introduction to Bayesian Statistics: Part 2: How Quadratic Approximation Works](https://medium.com/analytics-vidhya/bayesian-inference-how-quadratic-approximation-works-40cc70e79fb0)
--   [Machine Learning Mastery - Markov Chain Monte Carlo](https://machinelearningmastery.com/markov-chain-monte-carlo-for-probability/)
--   [Matthew Conlen - Kernel Density Estimation](https://mathisonian.github.io/kde/)
--   [McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan (Second edition). Boca Raton London New York. CRC Press, Taylor & Francis Group.](https://xcelab.net/rm/statistical-rethinking/)
--   [Wikipedia - Beta Distribution](https://en.wikipedia.org/wiki/Beta_distribution)
--   [Wikipedia - Binomial Distribution](https://en.wikipedia.org/wiki/Binomial_distribution)
--   [Wikipedia - Conjugate Prior](https://en.wikipedia.org/wiki/Conjugate_prior)
+- [Analytics Vidhya - Introduction to Bayesian Statistics: Part 2: How Quadratic Approximation Works](https://medium.com/analytics-vidhya/bayesian-inference-how-quadratic-approximation-works-40cc70e79fb0)
+- [Machine Learning Mastery - Markov Chain Monte Carlo](https://machinelearningmastery.com/markov-chain-monte-carlo-for-probability/)
+- [Matthew Conlen - Kernel Density Estimation](https://mathisonian.github.io/kde/)
+- [McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan (Second edition). Boca Raton London New York. CRC Press, Taylor & Francis Group.](https://xcelab.net/rm/statistical-rethinking/)
+- [Wikipedia - Beta Distribution](https://en.wikipedia.org/wiki/Beta_distribution)
+- [Wikipedia - Binomial Distribution](https://en.wikipedia.org/wiki/Binomial_distribution)
+- [Wikipedia - Conjugate Prior](https://en.wikipedia.org/wiki/Conjugate_prior)

@@ -2,6 +2,8 @@
 title: Some Counterintuitive Python `finally` Behaviour
 pubDate: 2022-04-04
 description: An explanation of some counterintuitive behaviour in a `finally` code block
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 ## TL;DR
@@ -16,15 +18,58 @@ However, as I was working on this, I came across a (to me) very counterintuitive
 
 Here's the scenario. Imagine that you have some code representing a person, and you have some code which acts on it:
 
-`embed:./resources/person1.py`
+```python
+class Person:
+    def __init__(self, first_name: str, last_name: str):
+        self.first_name = first_name
+        self.last_name = last_name
+
+    def get_id(self):
+        """ Maybe we make an API or database call here or something """
+        return "abc123"
+
+def process_person(person: Person):
+    """ This does something """
+    return person.get_id()
+
+```
 
 Obviously this is a bit dangerous (what if `get_id` throws an error?), so let's add some quick exception handling and print out a nice message:
 
-`embed:./resources/diff12.diff`
+```diff
+ def process_person(person: Person):
+     """ This does something """
+-    return person.get_id()
++    try:
++        return person.get_id()
++    except Exception as e:
++        print(f"Error calling do_something for Person {person.first_name} {person.last_name}:", e)
++    return None
+
+```
 
 Now here's where I ran into the problem. Imagine that you are now doing a refactor, because you realized that not everyone has a first and last name. You're also in a bit of a rush, so you forget to update that everywhere!
 
-`embed:./resources/diff23.diff`
+```diff
+-    def __init__(self, first_name: str, last_name: str):
+-        self.first_name = first_name
+-        self.last_name = last_name
++    def __init__(self, name: str):
++        self.name = name
+
+     def get_id(self):
+         """ Maybe we make an API or database call here or something """
+         return "abc123"
+
+ def process_person(person: Person):
+     """ This does something """
+     try:
+         return person.get_id()
+     except Exception as e:
+         print(f"Error calling do_something for Person {person.first_name} {person.last_name}:", e)
+     return None
+
+```
 
 The problem is that if there's an exception, then `process_person` will enter the `except` block. Now, however, it will run into an issue - the `Person` object no longer has `first_name` or `last_name` attributes, and so another exception will be raised, this one unhandled. Now, instead of printing a nice error message and returning `None` (presumably to be dealt with by whatever is calling `process_person`), we have an exception being raised.
 
@@ -32,7 +77,25 @@ The insidious thing about this is that if everything goes well, you'll never eve
 
 So, fair enough - I messed up, so let's fix this. I want the actual id to be returned if possible, but if not, then no matter what happened, I want to return `None`.
 
-`embed:./resources/diff34.diff`
+```diff
+     def __init__(self, name: str):
+         self.name = name
+
+     def get_id(self):
+         """ Maybe we make an API or database call here or something """
+         return "abc123"
+
+ def process_person(person: Person):
+     """ This does something """
+     try:
+         return person.get_id()
+     except Exception as e:
+         print(f"Error calling do_something for Person {person.first_name} {person.last_name}:", e)
+-    return None
++    finally:
++        return None
+
+```
 
 This seems reasonable - if everything is good then return the id, if not then no matter what happens return `None`. However, the actual behaviour was that `None` was returned every time!
 
@@ -48,7 +111,27 @@ To be honest, as I write this out it seems obvious - of course a `finally` claus
 
 So, how should I structure this? The solution that I used is to set the default value (taken on if there's an exception) before the `try...except...finally` block, and have the only `return` statement in the `finally` block.
 
-`embed:./resources/diff45.diff`
+```diff
+     def __init__(self, name: str):
+         self.name = name
+
+     def get_id(self):
+         """ Maybe we make an API or database call here or something """
+         return "abc123"
+
+ def process_person(person: Person):
+     """ This does something """
++    person_id = None
+     try:
+-        return person.get_id()
++        person_id = person.get_id()
+     except Exception as e:
+         print(f"Error calling do_something for Person {person.first_name} {person.last_name}:", e)
+     finally:
+-        return None
++        return person_id
+
+```
 
 ## Conclusion
 

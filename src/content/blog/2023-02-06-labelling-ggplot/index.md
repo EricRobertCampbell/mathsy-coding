@@ -2,6 +2,8 @@
 title: Create Multiple Lines with Labels in ggplot2
 pubDate: 2023-02-06
 description: How to graph multiple lines and assign custom legend labels using the ggplot2 package for R
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 While working on something else, I came across the problem of graphing multiple lines on the same set of axes using [ggplot2](https://ggplot2.tidyverse.org/). I did not find it nearly as straightforward as I expected (largely due to my limited experience with R in general and ggplot2 in particular), so this serves as an archive of how to do this!
@@ -10,14 +12,14 @@ While working on something else, I came across the problem of graphing multiple 
 
 Creating and labelling a single line is relatively straightforward, although it took me a while to get used to the `ggplot2` way of doing things. Most of my graphing experience is with [tikz (LaTeX)](https://github.com/pgf-tikz/pgf) and [matplotlib (Python)](https://matplotlib.org/), so wrapping my head around mappings and different layers took a while, and to be honest, I am still not particularly comfortable with it. Nonetheless, here is how we can graph a single line and add custom labels to the legend.
 
-```R
+```r
 # Load the library and set the options
 library(ggplot2)
 
 options(repr.plot.width=12, repr.plot.height=8)
 ```
 
-```R
+```r
 times <- seq(0, 10, by=0.5)
 x1 <- rnorm(n=length(times), mean=times, sd=0.5) # line centred around y = x but with some error
 df <- data.frame(time=times, x1=x1)
@@ -40,7 +42,7 @@ head(df)
 </tbody>
 </table>
 
-```R
+```r
 ggplot(df, aes(time, x1, colour="first")) + # without `colour` there would be no legend entry
 	# In the above line, the actual value for 'colour' doesn't matter
 	geom_line() + # graph a line
@@ -54,7 +56,7 @@ ggplot(df, aes(time, x1, colour="first")) + # without `colour` there would be no
 	theme(plot.title=element_text(hjust=0.5))
 ```
 
-![Single line with label](./resources/single-line.png)
+![Single line with label](/src/content/blog/2023-02-06-labelling-ggplot/resources/single-line.png)
 
 ## Multiple Lines
 
@@ -64,7 +66,7 @@ Graphing a single line and including a custom label in the legend wasn't too bad
 
 In this method, I'll add the lines from the single, 'wide' dataframe using multiple calls to `geom_line`, each being manually assigned to the column of the dataframe from which it is getting the data.
 
-```R
+```r
 # Adding a second set of data to the frame
 df$x2 <- rnorm(length(times), mean=times * 1.1, sd=0.5)
 head(df)
@@ -86,7 +88,7 @@ head(df)
 </tbody>
 </table>
 
-```R
+```r
 ggplot(df, aes(x=time)) +
 	# Manually adding the first line
 	geom_line(aes(y=x1, colour="first")) +
@@ -102,13 +104,13 @@ ggplot(df, aes(x=time)) +
 	ylab("Value")
 ```
 
-![Multiple lines with labels](./resources/multiple-lines-1.png)
+![Multiple lines with labels](/src/content/blog/2023-02-06-labelling-ggplot/resources/multiple-lines-1.png)
 
 ### Method 2 - "Melting" the DataFrame
 
 This method, which seems to be more idiomatic, involves transforming the dataframe from being 'wide', with each set of lines in their own separate columns, to being 'tall', with all of the different values being in the same column and using a different column as a key to allow `ggplot2` to tell which data points should be assigned to each different line.
 
-```R
+```r
 melted_df <- cbind(df['time'], stack(df[c('x1', 'x2')]))
 head(melted_df)
 ```
@@ -129,13 +131,13 @@ head(melted_df)
 </tbody>
 </table>
 
-```R
+```r
 # renaming the columns: 'values' -> 'value' and 'ind' -> 'variable'
 colnames(melted_df)[colnames(melted_df) == 'values'] = "value"
 colnames(melted_df)[colnames(melted_df) == 'ind'] = "variable"
 ```
 
-```R
+```r
 # This time the colour is set automatically by the `variable` column
 ggplot(melted_df, aes(time, value, colour=variable)) +
 	geom_line() +
@@ -147,7 +149,7 @@ ggplot(melted_df, aes(time, value, colour=variable)) +
 	ylab("Value")
 ```
 
-![Multiple lines with labels](./resources/multiple-lines-2.png)
+![Multiple lines with labels](/src/content/blog/2023-02-06-labelling-ggplot/resources/multiple-lines-2.png)
 
 ## Conclusion
 

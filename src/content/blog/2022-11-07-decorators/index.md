@@ -2,6 +2,8 @@
 title: Decorators in Python
 pubDate: 2022-11-07
 description: Creating our own Python decorators
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 In this post, we're going to look at how we can create decorators - Python functions that themselves modify and return functions!

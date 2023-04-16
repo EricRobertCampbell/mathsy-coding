@@ -2,6 +2,8 @@
 title: Logistic Growth
 pubDate: 2023-04-03
 description: Working through the logistic growth model
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 ## Introduction and Explanation
@@ -14,7 +16,7 @@ $$
 \frac{dN}{dt} = rN,\, N(0)=N_0
 $$
 
-Where $N(t)$ is the size of the population at a time $t$, $r$ is the growth rate, and $N_0$ is the initial population size. The solution to this is given by $N(t) = N_0e^{rt}$. I've written about this model [before](2021-08-16-exponentialGrowth/).
+Where $N(t)$ is the size of the population at a time $t$, $r$ is the growth rate, and $N_0$ is the initial population size. The solution to this is given by $N(t) = N_0e^{rt}$. I've written about this model [before](/blog/2021-08-16-exponentialgrowth/).
 
 While this model has the virtue of simplicity, it is not particularly realistic. The size of the population, assuming that the growth rate $r$ is positive, quickly reaches ludicrous levels. As such, we need a better model!
 
@@ -32,7 +34,7 @@ From the above equation, the system has two stationary points: $N = 0$ and $N = 
 
 Let's take a look at the slope field for this system, settings $r=1$ and $K=100$:
 
-```R
+```r
 library(ggplot2)
 
 len <- 5
@@ -58,7 +60,7 @@ ggplot(df) +
 
 ```
 
-![Slope field for logistic growth](./resources/slope-field.png)
+![Slope field for logistic growth](/src/content/blog/2023-04-03-logistic-growth/resources/slope-field.png)
 
 This makes it look like the stationary point $N=0$ is unstable and $N=K$ is stable. Now let's justify that algebraically. To do that, we'll [linearize](<https://eng.libretexts.org/Bookshelves/Industrial_and_Systems_Engineering/Book%3A_Chemical_Process_Dynamics_and_Controls_(Woolf)/10%3A_Dynamical_Systems_Analysis/10.02%3A_Linearizing_ODEs>) the equation by taking a Taylor series about each of the stationary points and dropping all but the first two terms. When we do this, we find that a system (in general, not just this one) is stable if the second derivative at that point is negative and unstable if it is positive.
 
@@ -223,7 +225,7 @@ Again, we can think of these as having physical significance. These subsititions
 
 ## Conclusion
 
-The logistic growth model, and the curve that arises from it naturally, are fascinating to look at. In this post, I've just scratched the surface - there are many other interesting things to learn about. The logistic function, as well as arising in various forms in many ecological systems, also arises in other, seemingly unrelated fields. For instance, it is often used in machine learning as well as in the [ranking of individuals](/2022-10-03-ranking/). Hopefully this helped to explain some of the properties of this system and the resulting function!
+The logistic growth model, and the curve that arises from it naturally, are fascinating to look at. In this post, I've just scratched the surface - there are many other interesting things to learn about. The logistic function, as well as arising in various forms in many ecological systems, also arises in other, seemingly unrelated fields. For instance, it is often used in machine learning as well as in the [ranking of individuals](/blog/2022-10-03-ranking/). Hopefully this helped to explain some of the properties of this system and the resulting function!
 
 ## Sources and Futher Reading
 

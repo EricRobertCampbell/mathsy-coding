@@ -2,6 +2,8 @@
 title: Unbiased Estimators for Mean and Variance
 pubDate: 2021-11-01
 description: Unbiased estimators for mean and variance, along with proofs
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 When we are presented with data, we often want to try to get some sort of grasp on how it is shaped. To this end, we would like to be able to estimate the mean and variance (or standard deviation). Let's dive in to these estimators, and look at proofs that they are unbiased!
@@ -108,24 +110,81 @@ Now that we've looked at the mathematics behind this, let's look at how we can w
 
 ### In JavaScript
 
-`embed:./resources/inJavascript.js`
+```js
+function calculateSampleVariance(numbers) {
+	const n = numbers.length;
+	const xBar = numbers.reduce((sum, current) => sum + current, 0) / n;
+	const sampleVariance =
+		numbers.reduce((sum, current) => sum + (current - xBar) ** 2, 0) /
+		(n - 1);
+	return sampleVariance;
+}
+
+console.log(
+	`Sample variance of [1, 1, 1, 1, 1]: ${calculateSampleVariance([
+		1, 1, 1, 1, 1,
+	])}`
+);
+console.log(
+	`Sample variance of [1, 2, 3, 4, 5]: ${calculateSampleVariance([
+		1, 2, 3, 4, 5,
+	])}`
+);
+```
 
 Output:
-`embed:resources/inJavascript-output.txt`
+
+```
+Sample variance of [1, 1, 1, 1, 1]: 0
+Sample variance of [1, 2, 3, 4, 5]: 2.5
+```
 
 ### In Python
 
-`embed:./resources/in_python.py`
+```python
+def calculate_sample_variance(numbers: list) -> float:
+    """ Calculate the sample variance """
+    n = len(numbers)
+    x_bar = sum(numbers) / n
+    sample_variance = sum(map(lambda x: (x - x_bar) ** 2, numbers)) / (n - 1)
+    return sample_variance
+
+
+print(
+    f"Sample variance of the set [1, 1, 1, 1, 1]: {calculate_sample_variance([1, 1, 1, 1, 1])}"
+)
+print(
+    f"Sample variance of the set [1, 2, 3, 4, 5]: {calculate_sample_variance([1, 2, 3, 4, 5])}"
+)
+```
 
 Output:
-`embed:resources/in_python-output.txt`
+
+```
+Sample variance of the set [1, 1, 1, 1, 1]: 0.0
+Sample variance of the set [1, 2, 3, 4, 5]: 2.5
+```
 
 ### In R
 
-`embed:./resources/inR.R`
+```r
+calculateSampleVariance <- function(numbers) {
+	n <- length(numbers)
+	xBar <- sum(numbers) / n
+	sampleVariance <- sum( ( numbers - xBar ) ** 2 ) / (n - 1)
+	return(sampleVariance)
+}
+
+sprintf("Sample variance of [1, 1, 1, 1, 1]: %.1f", calculateSampleVariance(c(1, 1, 1, 1, 1)))
+sprintf("Sample variance of [1, 2, 3, 4, 5]: %.1f", calculateSampleVariance(c(1, 2, 3, 4, 5)))
+```
 
 Output:
-`embed:resources/inR-output.txt`
+
+```
+[1] "Sample variance of [1, 1, 1, 1, 1]: 0.0"
+[1] "Sample variance of [1, 2, 3, 4, 5]: 2.5"
+```
 
 ## Conclusions
 

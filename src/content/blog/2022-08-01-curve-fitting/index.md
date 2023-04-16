@@ -2,6 +2,8 @@
 title: How Quickly Did Tyrannosaurs Grow? Curve Fitting with SciPy
 pubDate: 2022-08-01
 description: How to use SciPy's curve_fit function to optimize function parameters
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 ## Introduction
@@ -12,13 +14,42 @@ Lately, I've become more interested in paleontology and have started to read mor
 
 To begin with, let's start with the simplest application of `curve_fit`: performing a linear regression. Let's generate some fake data to start. The data itself will be of the form $y = 2x + 3 + \epsilon$, with $\epsilon \sim N(0, 1)$.
 
-`embed:./resources/generate_linear_data.r`
+```r
+# Generate random data fitting a linear equation y = 2x + 3 + N(0, 1)
+
+xs <- seq(-3, 3, 0.5)
+sigma <- 1
+errors <- rnorm(length(xs), 0, sigma)
+ys <- 2 * xs + 3 + errors
+data <- data.frame(x=xs, y=ys)
+write.csv(data, "linear_data.csv", row.names=F)
+
+png(file="linear_data.png")
+	plot(ys ~ xs, main="Linear Data (with noise)", xlab="x", ylab="y")
+	curve(2*x+3, add=T)
+dev.off()
+```
 
 The data itself looks as follows:
 
-`embed:./resources/linear_data.csv`
+```
+"x","y"
+-3,-2.85528637087481
+-2.5,-0.2839377919616
+-2,-0.862210829714574
+-1.5,-0.637626631963547
+-1,1.24584946456147
+-0.5,1.31450035272819
+0,2.14133679507907
+0.5,6.61915638937528
+1,5.14362896464176
+1.5,5.63355382223453
+2,7.19223928757166
+2.5,7.36080742979852
+3,7.87498175608272
+```
 
-![Initial Fake Linear Data](./resources/linear_data.png)
+![Initial Fake Linear Data](/src/content/blog/2022-08-01-curve-fitting/resources/linear_data.png)
 
 Now let's fit the data! The general shape of the `curve_fit` function is `curve_fit(f, xdata, ydata)`. Here, `f` is a callable (a function) which takes in an $x$ value as its first parameter and then the actual parameters to be fit as the others: `f(x, *params)`. What `curve_fit` is attempting to do is find the parameters which minimize the least-squares distance between `f(xdata, *params)` and `ydata`. Nominally, we expect `ydata = f(xdata, *params)`.
 
@@ -33,9 +64,33 @@ def linear_curve(x, m, b):
 
 The entire program to load in the data, find an optimal solution, and plot it are as follows:
 
-`embed:./resources/fit_linear_curve.py`
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
 
-![Linear Fit](./resources/fitted_linear_curve.jpg)
+from scipy.optimize import curve_fit
+
+def linear_curve(x, m, b) -> float:
+    return m * x + b
+
+df = pd.read_csv('./linear_data.csv')
+
+result = curve_fit(linear_curve, df['x'], df['y'])
+popt, pcov = result
+m, b = popt
+
+fig, ax = plt.subplots()
+fig.suptitle('Fitting a Linear Curve')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.plot('x', 'y', 'ko', data=df, label="Raw Data")
+ax.plot(df['x'], 2 * df['x'] + 3, 'k-', label="Actual")
+ax.plot(df.x, m * df.x + b, 'r--', label=f"Fitted - m={m:.2f}, b={b:.2f}")
+ax.legend()
+fig.savefig('fitted_linear_curve.jpg')
+```
+
+![Linear Fit](/src/content/blog/2022-08-01-curve-fitting/resources/fitted_linear_curve.jpg)
 
 We can see that we are getting a good agreement between the actual function used to generate the data and what we extracted using curve fitting.
 
@@ -63,11 +118,52 @@ $$
 
 So now we have four parameters instead of two, but apart from that the process is the same. So, let's load in the data, fit the curve, and plot the results!
 
-`embed:./resources/fit_logistic1.py`
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from scipy.optimize import curve_fit
+
+def logistic(x, A, k, x_0, offset) -> float:
+    expected = A / (1 + np.exp(-k * (x - x_0))) + offset
+    return expected
+
+df = pd.read_csv('./tyrannosaurus_growth_table.csv', dtype={'age': np.double, 'mass': np.double})
+print(df)
+
+popt, pcov = curve_fit(logistic, df.age, df.mass )
+A, k, x_0, offset = popt
+
+ages = np.linspace(0, 30, 101)
+masses = logistic(ages, *popt)
+
+fig, ax = plt.subplots()
+fig.suptitle("Tyrannosaurus Rex Growth Curve")
+ax.plot('age', 'mass', 'ko', data=df, label="Data")
+ax.plot(ages, masses, 'k-', data=df, label="Fitted Curve")
+ax.set_xlabel('Age (Years)')
+ax.set_ylabel('Mass (kg)')
+ax.legend()
+fig.savefig("tyrannosaurus_growth_curve.jpg")
+```
 
 Disaster! If you try running this you get a very nasty looking error:
 
-`embed:./resources/error1.txt`
+```
+/home/eric/.local/lib/python3.8/site-packages/scipy/optimize/minpack.py:833: OptimizeWarning: Covariance of the parameters could not be estimated
+  warnings.warn('Covariance of the parameters could not be estimated',
+Traceback (most recent call last):
+  File "fit_logistic.py", line 24, in <module>
+    ax.plot(ages, masses, 'k-', data=df, label="Fitted Curve")
+  File "/home/eric/.local/lib/python3.8/site-packages/matplotlib/axes/_axes.py", line 1605, in plot
+    lines = [*self._get_lines(*args, data=data, **kwargs)]
+  File "/home/eric/.local/lib/python3.8/site-packages/matplotlib/axes/_base.py", line 315, in __call__
+    yield from self._plot_args(this, kwargs)
+  File "/home/eric/.local/lib/python3.8/site-packages/matplotlib/axes/_base.py", line 501, in _plot_args
+    raise ValueError(f"x and y must have same first dimension, but "
+ValueError: x and y must have same first dimension, but have shapes (101,) and (7,)
+```
 
 Although the error is somewhat cryptic (unless perhaps you spend a lot of time with this function), it turns out the issue is that it was not correctly able to fit the curve because the actual parameters are too far away from the initial parameters.
 
@@ -75,8 +171,43 @@ Wait, I hear you say - what initial parameters? We didn't pass any in! It turns 
 
 So, how do we ask the function to start the curve at these parameter values? We simply have to pass in the `p0=initial_params` keyword argument to the function. So, let's do exactly that:
 
-`embed:./resources/fit_logistic_1_2.diff`
-![Fitted Tyrannosaurus Growth Curve](./resources/tyrannosaurus_growth_curve.jpg)
+```diff
+ import numpy as np
+ import pandas as pd
+ import matplotlib.pyplot as plt
+
+ from scipy.optimize import curve_fit
+
+ def logistic(x, A, k, x_0, offset) -> float:
+     expected = A / (1 + np.exp(-k * (x - x_0))) + offset
+     return expected
+
+ df = pd.read_csv('./tyrannosaurus_growth_table.csv', dtype={'age': np.double, 'mass': np.double})
+-print(df)
+
+-popt, pcov = curve_fit(logistic, df.age, df.mass )
++paper_values = [5551, 0.57, 16.1, 5]
++
++popt, pcov = curve_fit(logistic, df.age, df.mass, p0=paper_values)
+ A, k, x_0, offset = popt
+
++# for plotting the fitted curve
+ ages = np.linspace(0, 30, 101)
+ masses = logistic(ages, *popt)
+
+ fig, ax = plt.subplots()
+ fig.suptitle("Tyrannosaurus Rex Growth Curve")
+ ax.plot('age', 'mass', 'ko', data=df, label="Data")
+-ax.plot(ages, masses, 'k-', data=df, label="Fitted Curve")
++ax.plot(ages, masses, 'k-', label="Fitted Curve")
+ ax.set_xlabel('Age (Years)')
+ ax.set_ylabel('Mass (kg)')
+ ax.legend()
+ fig.savefig("tyrannosaurus_growth_curve.jpg")
+-
+```
+
+![Fitted Tyrannosaurus Growth Curve](/src/content/blog/2022-08-01-curve-fitting/resources/tyrannosaurus_growth_curve.jpg)
 
 Again, just by visually inspecting this we can see that this is a very reasonable regression curve for the data!
 
@@ -84,8 +215,42 @@ Again, just by visually inspecting this we can see that this is a very reasonabl
 
 This is pretty fantastic - we were very quickly and easily able to fit a curve to the data! Unfortunately, as you may have noticed, the parameters that we found are _not_ those found in the parper. In fact, we can plot the values that they gave against ours to see the difference:
 
-![Tyrannosaurus Growth Curve - Fitted Against Paper Parameters](./resources/tyrannosaurus_growth_curve_with_paper.jpg)
-`embed:./resources/fit_logistic_2_3.diff`
+![Tyrannosaurus Growth Curve - Fitted Against Paper Parameters](/src/content/blog/2022-08-01-curve-fitting/resources/tyrannosaurus_growth_curve_with_paper.jpg)
+
+```python
+ import numpy as np
+ import pandas as pd
+ import matplotlib.pyplot as plt
+
+ from scipy.optimize import curve_fit
+
+ def logistic(x, A, k, x_0, offset) -> float:
+     expected = A / (1 + np.exp(-k * (x - x_0))) + offset
+     return expected
+
+ df = pd.read_csv('./tyrannosaurus_growth_table.csv', dtype={'age': np.double, 'mass': np.double})
+
+ paper_values = [5551, 0.57, 16.1, 5]
+
+ popt, pcov = curve_fit(logistic, df.age, df.mass, p0=paper_values)
+ A, k, x_0, offset = popt
+
+ # for plotting the fitted curve
+ ages = np.linspace(0, 30, 101)
+ masses = logistic(ages, *popt)
++paper_masses = logistic(ages, *paper_values)
+
+ fig, ax = plt.subplots()
+ fig.suptitle("Tyrannosaurus Rex Growth Curve")
+ ax.plot('age', 'mass', 'ko', data=df, label="Data")
+ ax.plot(ages, masses, 'k-', label="Fitted Curve")
++ax.plot(ages, paper_masses, 'r--', label="Paper Curve")
+ ax.set_xlabel('Age (Years)')
+ ax.set_ylabel('Mass (kg)')
+ ax.legend()
+-fig.savefig("tyrannosaurus_growth_curve.jpg")
++fig.savefig("tyrannosaurus_growth_curve_with_paper.jpg")
+```
 
 I may be biased, but the curve that we found seems to fit the data better. In fact, we can say empirically that it does - if you find the sum of mean squared errors for our fitted curve against the one from the paper, you find a higher sum of errors for the paper, which means that ours is a better fit to the data.
 

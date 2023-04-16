@@ -2,6 +2,8 @@
 title: A Quick Look At Exponential Growth
 pubDate: 2021-08-16
 description: A quick look at exponential growth
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 Since exponential growth has been so much in the news lately, let's take a quick look at it!
@@ -57,8 +59,30 @@ $$
 
 Now let's double-check our math graphically. Let's say we check a population of mice once a year, and find that each year the population is twice that of the previous year. That means that $k_d = 2$, and so $k_c = \ln 2 \approx 0.693\dots$. If we plot the population growing discretely with $k_d = 2$ and continuously with $k_c = \ln 2$, we should find that the plots coincide. Plotting was done using MatPlotLib.
 
-`embed:resources/exponentials.py`
+![Continuous and Discrete Exponential Growth](/exponentials.png)
 
-![Continuous and Discrete Exponential Growth](./resources/exponentials.png)
+```python
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+k_disc = 2
+k_cont = math.log(k_disc)
+
+continuous_xs = np.linspace(0, 5, 1000)
+continuous_ys = [math.exp(k_cont * x) for x in continuous_xs]
+
+discrete_xs = range(0, 5 + 1)
+discrete_ys = [k_disc ** x for x in discrete_xs]
+
+fig, ax = plt.subplots()
+plt.title("Discrete and Continuous Exponential Growth")
+plt.xlabel("Time (years)")
+plt.ylabel("Population")
+ax.plot(continuous_xs, continuous_ys, "g-", label="Continuous")
+ax.plot(discrete_xs, discrete_ys, "ro", label="Discrete")
+ax.legend()
+plt.savefig("exponentials")
+```
 
 Just by looking at it, we can see that we were bang on!

@@ -2,6 +2,8 @@
 title: An Example of Bayesian Updating
 pubDate: 2022-05-02
 description: A simple example of Bayesian updating, leading to Bayes' Theorem for distributions
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 ## Introduction
@@ -84,7 +86,7 @@ So, as expected, as we continue to flip heads our belief that the coin that we h
 
 Let's take a look at these results graphically:
 
-![results](./resources/results_graph.png)
+![results](/src/content/blog/2022-05-02-bayesian-update-problem/resources/results_graph.png)
 
 Notice the relabelling of the coins.
 

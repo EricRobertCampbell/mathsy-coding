@@ -2,11 +2,13 @@
 title: Solving Initial Value Problems in R Using deSolve
 pubDate: 2023-03-06
 description: How to solve initial value problems (ODEs) using the deSolve package for R.
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
-This post is a repeat of my [earlier post](/2022-07-04-solving-odes-with-python/) on solving initial value problems, but now using the [deSolve](https://cran.r-project.org/web/packages/deSolve/index.html) package ([documentation](https://cran.r-project.org/web/packages/deSolve/deSolve.pdf)).
+This post is a repeat of my [earlier post](/blog/2022-07-04-solving-odes-with-python/) on solving initial value problems, but now using the [deSolve](https://cran.r-project.org/web/packages/deSolve/index.html) package ([documentation](https://cran.r-project.org/web/packages/deSolve/deSolve.pdf)).
 
-```R
+```r
 library(deSolve)
 library(ggplot2)
 
@@ -30,7 +32,7 @@ For ordinary differently equations, the `deSolve` package provides the `ode` fun
 -   `parameters` represents any parameters to the system
     The function should return a list of time derivatives of the variables.
 
-```R
+```r
 parameters <- c(a=1) # here the growth rate is 1
 state <- c(y=1) # initial state is 1
 times <- seq(0, 5, by=0.1)
@@ -45,7 +47,7 @@ linearGrowth <- function(t, state, parameters) {
 
 While most of this is relatively straightforward, there is one wrinkle - the `with` function. What this does is make the variables and parameters stored in `state` and `parameters` respectively available using just their names, rather than having to access them using `parameters[['a']]` or whatnot. Although confusing at first, [the R documentation](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/with) does a good job of explaining how it works.
 
-```R
+```r
 out <- ode(y=state, times=times, func=linearGrowth, parms=parameters)
 head(out)
 ```
@@ -65,7 +67,7 @@ head(out)
 </tbody>
 </table>
 
-```R
+```r
 # convert to a dataframe for graphing
 df <- data.frame(time=out[,"time"], y=out[,'y'])
 head(df)
@@ -87,15 +89,15 @@ head(df)
 </tbody>
 </table>
 
-```R
+```r
 ggplot(df, aes(time, y)) + geom_point() + geom_line()
 ```
 
-![Numerical solution to linear growth](./resources/linear-growth.png)
+![Numerical solution to linear growth](/src/content/blog/2023-03-06-solving-ivps-with-desolve/resources/linear-growth.png)
 
 From this, it seems like our numerical solution to this system is pretty good. But how good is it? Since we can solve this system exactly, we can actually compute the maximum deviation that the numerical solution produced:
 
-```R
+```r
 df['exact'] <- exp(df['time'])
 max(abs(df['y'] - df['exact']))
 ```
@@ -129,7 +131,7 @@ And the parameter
 
 Luckily, our approach to solving this hardly has to change at all.
 
-```R
+```r
 lotkaVolterra <- function(t, state, parameters) {
     with(as.list(c(state, parameters)), {
         dxdt <- x * (b - p * y)
@@ -144,7 +146,7 @@ times <- seq(0, 15, by=0.01)
 out <- ode(y=state, times=times, parms=parameters, func=lotkaVolterra)
 ```
 
-```R
+```r
 # again, converting to a dataframe for graphing
 df <- data.frame(time=out[,'time'], x=out[,'x'], y=out[,'y'])
 head(df)
@@ -168,7 +170,7 @@ head(df)
 
 In order to see what is going on with our solution, we'll first plot both the predator and prey populations against the time.
 
-```R
+```r
 ggplot(df, aes(x=time)) +
     geom_line(aes(y=x, colour="x"), linewidth=2) +
     geom_line(aes(y=y, colour="y"), linewidth=2) +
@@ -179,11 +181,11 @@ ggplot(df, aes(x=time)) +
     theme(plot.title=element_text(hjust=0.5))
 ```
 
-![Solution to Lotka-Volterra - populations against time](./resources/lotka-volterra-against-time.png)
+![Solution to Lotka-Volterra - populations against time](/src/content/blog/2023-03-06-solving-ivps-with-desolve/resources/lotka-volterra-against-time.png)
 
 From this, is seems like the system demonstrates some periodic behaviour. Just by eyeballing this graph, it seems like the period is roughly seven years. To see this more clearly, let's now plot the prey population against the predator one for about one cycle.
 
-```R
+```r
 ggplot(df[df['time'] < 7,], aes(x, y, colour=time)) +
 	scale_colour_gradient(low='blue', high='red', aesthetics='colour') +
 	geom_path(linewidth=4) +
@@ -193,7 +195,7 @@ ggplot(df[df['time'] < 7,], aes(x, y, colour=time)) +
 	ylab("Predator")
 ```
 
-![Lotka-Volterra Phase Space Diagram](./resources/lotka-volterra-phase-space.png)
+![Lotka-Volterra Phase Space Diagram](/src/content/blog/2023-03-06-solving-ivps-with-desolve/resources/lotka-volterra-phase-space.png)
 
 This make it far more clear that the system is periodic.
 
@@ -211,7 +213,7 @@ $$
 
 with $\sigma=10$, $\beta=\frac{8}{3}$, and $\rho = 28$ (as originally used by Lorenz).
 
-```R
+```r
 parameters <- c(sigma=10, beta=8/3, rho=28)
 state <- c(x=1, y=1, z=1)
 
@@ -243,7 +245,7 @@ head(out)
 </tbody>
 </table>
 
-```R
+```r
 # convert to dataframe
 df <- data.frame(
     time=out[,'time'],
@@ -270,7 +272,7 @@ head(df)
 </tbody>
 </table>
 
-```R
+```r
 # 'melt' the dataframe for graphing
 melted_df <- cbind(df['time'], stack(df[c('x', 'y', 'z')]))
 head(melted_df)
@@ -294,22 +296,22 @@ head(melted_df)
 
 The first way that we'll examine this is through plots of each individual variable `x`, `y`, and `z` against the time.
 
-```R
+```r
 ggplot(melted_df, aes(x=time, y=values)) +
 	geom_line() +
 	facet_wrap(~ind)
 ```
 
-![Solution to Lorenz system - against time](./resources/lorenz-time.png)
+![Solution to Lorenz system - against time](/src/content/blog/2023-03-06-solving-ivps-with-desolve/resources/lorenz-time.png)
 
 It's a little hard to tell anything from these! To better see the behaviour, we should plot this in 3D. To do so, we'll use [plotly](https://plotly.com/r/) for R to see th results in three dimensions.
 
-```R
+```r
 library(plotly)
 plot_ly(df, x=~x, y=~y, z=~z, type='scatter3d', mode='lines')
 ```
 
-![3D View of the Lorenz System](./resources/lorenz3d.png)
+![3D View of the Lorenz System](/src/content/blog/2023-03-06-solving-ivps-with-desolve/resources/lorenz3d.png)
 
 ## Conclusion
 

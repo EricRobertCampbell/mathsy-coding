@@ -2,6 +2,8 @@
 title: Testing GraphQL Queries Using Cypress
 pubDate: 2023-01-02
 description: Testing whether or not a GraphQL query has been fired in Cypress
+updates:
+	- {date: 2023-04-16, message: Changing image and file paths}
 ---
 
 As part of my continuing testing efforts, I recently came across a problem for which I couldn't find an easy answer. As such, I thought that I should document my solution here, in the hopes that it saves someone else some trouble.
@@ -14,15 +16,62 @@ In the rest of this post, I'll use a very simple example project to demonstrate 
 
 The initial project we'll test is quite simple. The backend is an [express](https://expressjs.com/) server which serves graphQL at `/graphql`. There is only a single query, which returns a list of todos.
 
-`embed:resources/server.js`
+```js
+import express from "express";
+import cors from "cors";
+import { graphqlHTTP } from "express-graphql";
+import { buildSchema } from "graphql";
+
+const schema = buildSchema(`
+type Todo {
+	task: String!
+	complete: Boolean!
+}
+type Query {
+	todos: [Todo]
+}
+`);
+
+const root = {
+	todos: () => {
+		return [
+			{
+				task: "Finish the first task",
+				complete: true,
+			},
+			{
+				task: "Finish the second task",
+				complete: false,
+			},
+			{
+				task: "Finish the third task",
+				complete: false,
+			},
+		];
+	},
+};
+
+const app = express();
+app.use(cors({ credentials: true, origin: true }));
+app.use(
+	"/graphql",
+	graphqlHTTP({
+		schema,
+		rootValue: root,
+		graphiql: true,
+	})
+);
+app.listen(4000);
+console.log("Running a GraphQL API server at http://localhost:4000/graphql");
+```
 
 The frontend has a button which fetches and displays the todos, along with another button that does nothing.
 
 First there are no todos.
-![Initial state of the website](./resources/initial-website-state.png)
+![Initial state of the website](/src/content/blog/2023-01-02-graphql-cypress/resources/initial-website-state.png)
 
 And then you fetch some.
-![Final state of the website](./resources/final-website-state.png)
+![Final state of the website](/src/content/blog/2023-01-02-graphql-cypress/resources/final-website-state.png)
 
 Our goal here will be to write some test tooling to test that the buttons do what they should.
 
@@ -38,11 +87,38 @@ The issue that we have is that all of our calls are made to the same url: `/grap
 
 The code for the entire test is here:
 
-`embed:./resources/example-1.cy.js`
+```js
+// example.cy.js
+
+const aliasGraphqlQuery = (query, operationName, alias) => {
+	if (
+		query.body.hasOwnProperty("operationName") &&
+		query.body.operationName === operationName
+	) {
+		query.alias = alias;
+	}
+};
+
+describe("The application", () => {
+	beforeEach(() => {
+		cy.intercept("/graphql", res => {
+			aliasGraphqlQuery(res, "todos", "getTodosQuery");
+		});
+	});
+
+	it("Should make the graphql call to load the todos when the button is pressed", () => {
+		cy.visit("/");
+		cy.contains("h1", "Todos").should("exist");
+		cy.contains("button", /get todos/i).click();
+		cy.wait("@getTodosQuery");
+		cy.get("label").its("length").should("be.gt", 0);
+	});
+});
+```
 
 And the result of running it:
 
-![A successful graphQL query test](./resources/test1.png)
+![A successful graphQL query test](/src/content/blog/2023-01-02-graphql-cypress/resources/test1.png)
 
 ## Validating That a GraphQL Call Was _Not_ Made
 
@@ -52,11 +128,76 @@ The solution that I came up with works by aliasing the entire graphQL query, cou
 
 The updated code (including both tests) is here:
 
-`embed:./resources/example-2.cy.js`
+```js
+const aliasGraphqlQuery = (query, operationName, alias) => {
+	if (
+		query.body.hasOwnProperty("operationName") &&
+		query.body.operationName === operationName
+	) {
+		query.alias = alias;
+	}
+};
+
+/**
+ * Function to ensure that no call matching the filter condition is made after an action is performed
+ * @param {string} queryAlias - The alias for the query to be checked against
+ * @param {function} filter - A filter function which takes an interception as an argument
+ * @param {function} action - A function which should perform some sort of action which should *not* cause a graphql call matching the filter condition
+ * @param {number} timeout - the number of milliseconds to wait after taking the action for the call to be made
+ */
+const ensureQueryNotMadeAfterAction = (
+	queryAlias,
+	filter,
+	action,
+	timeout = 500
+) => {
+	const allAlias = `${queryAlias}.all`;
+	let numCalls;
+	// get the initial number of matching calls
+	cy.get(allAlias).then(interceptions => {
+		numCalls = interceptions.filter(filter).length;
+	});
+
+	// take some action and wait to give time for the call to be made
+	action();
+	cy.wait(timeout);
+
+	// now check that the number of matching calls hasn't changed
+	cy.get(allAlias).then(interceptions => {
+		expect(interceptions.filter(filter).length).to.eq(numCalls);
+	});
+};
+describe("The application", () => {
+	beforeEach(() => {
+		cy.intercept("/graphql", res => {
+			aliasGraphqlQuery(res, "todos", "getTodosQuery");
+		}).as("graphql");
+	});
+	it("Should make the graphql call to load the todos when the button is pressed", () => {
+		cy.visit("/");
+		cy.contains("h1", "Todos").should("exist");
+		cy.contains("button", /get todos/i).click();
+		cy.wait("@getTodosQuery");
+		cy.get("label").its("length").should("be.gt", 0);
+	});
+	it("Should not make a graphql call when the broken button is clicked", () => {
+		cy.visit("/");
+		cy.contains("h1", "Todos").should("exist");
+
+		// we care about the 'todo' operation
+		const filter = interception =>
+			interception.request.body.operationName === "todo";
+		// the action that shouldn't trigger the query is clicking the broken button
+		const action = () =>
+			cy.contains("button", /don't get additional todos/i).click();
+		ensureQueryNotMadeAfterAction("@graphql", filter, action);
+	});
+});
+```
 
 And the result of running the test is here:
 
-![Another successful test](./resources/test2.png)
+![Another successful test](/src/content/blog/2023-01-02-graphql-cypress/resources/test2.png)
 
 ## Conclusion
 
