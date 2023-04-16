@@ -1,59 +1,19 @@
 {
-  "name": "gatsby-starter-blog",
-  "private": true,
-  "description": "A starter for a blog powered by Gatsby and Markdown",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+  "name": "mathsy-coding",
+  "type": "module",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "gatsby": "^2.32.13",
-    "gatsby-image": "^2.11.0",
-    "gatsby-plugin-feed": "^2.13.1",
-    "gatsby-plugin-google-analytics": "^2.11.0",
-    "gatsby-plugin-manifest": "^2.12.1",
-    "gatsby-plugin-offline": "^3.10.2",
-    "gatsby-plugin-react-helmet": "^3.10.0",
-    "gatsby-plugin-sharp": "^2.14.4",
-    "gatsby-remark-copy-linked-files": "^2.10.0",
-    "gatsby-remark-embed-snippet": "^4.10.0",
-    "gatsby-remark-images": "^3.11.1",
-    "gatsby-remark-katex": "^3.10.0",
-    "gatsby-remark-prismjs": "^3.13.0",
-    "gatsby-remark-responsive-iframe": "^2.11.0",
-    "gatsby-remark-smartypants": "^2.10.0",
-    "gatsby-source-filesystem": "^2.11.1",
-    "gatsby-transformer-remark": "^2.16.1",
-    "gatsby-transformer-sharp": "^2.12.1",
-    "katex": "^0.15.1",
-    "prismjs": "^1.23.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-helmet": "^5.2.1",
-    "typeface-merriweather": "0.0.72",
-    "typeface-montserrat": "0.0.75"
-  },
-  "devDependencies": {
-    "prettier": "2.1.2"
-  },
-  "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "0BSD",
-  "main": "n/a",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gatsbyjs/gatsby-starter-blog.git"
-  },
-  "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "npm run develop",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "@astrojs/rss": "^2.3.2",
+    "@astrojs/sitemap": "^1.2.2",
+    "astro": "^2.3.0",
+    "rehype-katex": "^6.0.2",
+    "remark-math": "^5.1.1"
   }
 }
