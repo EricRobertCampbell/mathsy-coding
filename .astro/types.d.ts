@@ -242,6 +242,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2023-06-20-simple-bayesian-workflow/index.md": {
+  id: "2023-06-20-simple-bayesian-workflow/index.md",
+  slug: "2023-06-20-simple-bayesian-workflow",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
