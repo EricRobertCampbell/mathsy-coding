@@ -256,6 +256,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2023-10-21-melting-dataframes/index.md": {
+  id: "2023-10-21-melting-dataframes/index.md",
+  slug: "2023-10-21-melting-dataframes",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
