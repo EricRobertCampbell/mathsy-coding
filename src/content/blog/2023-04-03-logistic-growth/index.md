@@ -3,7 +3,10 @@ title: Logistic Growth
 pubDate: 2023-04-03
 description: Working through the logistic growth model
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+    - date: 2023-04-16
+      message: Changing image and file paths
+    - date: 2023-10-12
+      message: Changing picture and file paths
 ---
 
 ## Introduction and Explanation
@@ -60,7 +63,7 @@ ggplot(df) +
 
 ```
 
-![Slope field for logistic growth](/src/content/blog/2023-04-03-logistic-growth/resources/slope-field.png)
+![Slope field for logistic growth](/2023-04-03/slope-field.png)
 
 This makes it look like the stationary point $N=0$ is unstable and $N=K$ is stable. Now let's justify that algebraically. To do that, we'll [linearize](<https://eng.libretexts.org/Bookshelves/Industrial_and_Systems_Engineering/Book%3A_Chemical_Process_Dynamics_and_Controls_(Woolf)/10%3A_Dynamical_Systems_Analysis/10.02%3A_Linearizing_ODEs>) the equation by taking a Taylor series about each of the stationary points and dropping all but the first two terms. When we do this, we find that a system (in general, not just this one) is stable if the second derivative at that point is negative and unstable if it is positive.
 

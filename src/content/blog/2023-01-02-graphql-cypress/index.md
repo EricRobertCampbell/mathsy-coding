@@ -3,7 +3,10 @@ title: Testing GraphQL Queries Using Cypress
 pubDate: 2023-01-02
 description: Testing whether or not a GraphQL query has been fired in Cypress
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+    - date: 2023-04-16
+      message: Changing image and file paths
+    - date: 2023-10-12
+      message: Changing picture and file paths
 ---
 
 As part of my continuing testing efforts, I recently came across a problem for which I couldn't find an easy answer. As such, I thought that I should document my solution here, in the hopes that it saves someone else some trouble.
@@ -68,10 +71,10 @@ console.log("Running a GraphQL API server at http://localhost:4000/graphql");
 The frontend has a button which fetches and displays the todos, along with another button that does nothing.
 
 First there are no todos.
-![Initial state of the website](/src/content/blog/2023-01-02-graphql-cypress/resources/initial-website-state.png)
+![Initial state of the website](/2023-01-02/initial-website-state.png)
 
 And then you fetch some.
-![Final state of the website](/src/content/blog/2023-01-02-graphql-cypress/resources/final-website-state.png)
+![Final state of the website](/2023-01-02/final-website-state.png)
 
 Our goal here will be to write some test tooling to test that the buttons do what they should.
 
@@ -118,7 +121,7 @@ describe("The application", () => {
 
 And the result of running it:
 
-![A successful graphQL query test](/src/content/blog/2023-01-02-graphql-cypress/resources/test1.png)
+![A successful graphQL query test](/2023-01-02/test1.png)
 
 ## Validating That a GraphQL Call Was _Not_ Made
 
@@ -197,7 +200,7 @@ describe("The application", () => {
 
 And the result of running the test is here:
 
-![Another successful test](/src/content/blog/2023-01-02-graphql-cypress/resources/test2.png)
+![Another successful test](/2023-01-02/test2.png)
 
 ## Conclusion
 

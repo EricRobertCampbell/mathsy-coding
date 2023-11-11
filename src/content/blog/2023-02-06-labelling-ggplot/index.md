@@ -3,7 +3,10 @@ title: Create Multiple Lines with Labels in ggplot2
 pubDate: 2023-02-06
 description: How to graph multiple lines and assign custom legend labels using the ggplot2 package for R
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+    - date: 2023-04-16
+      message: Changing image and file paths
+    - date: 2023-10-12
+      message: Changing picture and file paths
 ---
 
 While working on something else, I came across the problem of graphing multiple lines on the same set of axes using [ggplot2](https://ggplot2.tidyverse.org/). I did not find it nearly as straightforward as I expected (largely due to my limited experience with R in general and ggplot2 in particular), so this serves as an archive of how to do this!
@@ -56,7 +59,7 @@ ggplot(df, aes(time, x1, colour="first")) + # without `colour` there would be no
 	theme(plot.title=element_text(hjust=0.5))
 ```
 
-![Single line with label](/src/content/blog/2023-02-06-labelling-ggplot/resources/single-line.png)
+![Single line with label](/2023-02-06/single-line.png)
 
 ## Multiple Lines
 
@@ -104,7 +107,7 @@ ggplot(df, aes(x=time)) +
 	ylab("Value")
 ```
 
-![Multiple lines with labels](/src/content/blog/2023-02-06-labelling-ggplot/resources/multiple-lines-1.png)
+![Multiple lines with labels](/2023-02-06/multiple-lines-1.png)
 
 ### Method 2 - "Melting" the DataFrame
 
@@ -149,7 +152,7 @@ ggplot(melted_df, aes(time, value, colour=variable)) +
 	ylab("Value")
 ```
 
-![Multiple lines with labels](/src/content/blog/2023-02-06-labelling-ggplot/resources/multiple-lines-2.png)
+![Multiple lines with labels](/2023-02-06/multiple-lines-2.png)
 
 ## Conclusion
 

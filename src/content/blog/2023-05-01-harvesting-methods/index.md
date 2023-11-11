@@ -3,7 +3,10 @@ title: Logistic Growth with Harvesting
 pubDate: 2023-05-01
 description: Analyzing the effects of different harvesting methods on a system described by logistic growth
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+    - date: 2023-04-16
+      message: Changing image and file paths
+    - date: 2023-10-12
+      message: Changing picture and file paths
 ---
 
 (Most of this is based on Chapter 1 of (Murray 2002).
@@ -78,7 +81,7 @@ $$
 
 We'd like to get a feel for the dynamics of the behaviour around the equilibrium point. The first thing that we should do is to create a slope field. For us, let's start with $r=1$, $K=100$, and $E=0.3$. Note that $E < \frac{r}{2}$, our highest yielding effort.
 
-![Slope field for logistic growth with constant effort](/src/content/blog/2023-05-01-harvesting-methods/resources/slope_field_constant_effort.png)
+![Slope field for logistic growth with constant effort](/2023-05-01/slope_field_constant_effort.png)
 
 ```r
 library(ggplot2)
@@ -182,7 +185,7 @@ $$
 
 Perhaps seeing this visually will help in our analysis:
 
-![Yield curve for constant effort](/src/content/blog/2023-05-01-harvesting-methods/resources/constant_effort_yield.png)
+![Yield curve for constant effort](/2023-05-01/constant_effort_yield.png)
 
 ```r
 y_ratio <- seq(0, 1, by=0.005)
@@ -221,7 +224,7 @@ $$
 
 Again, let's get a general feel for how this system behaves by looking at the slope field:
 
-![Slope field for the constant yield model](/src/content/blog/2023-05-01-harvesting-methods/resources/slope-field-constant-yield.png)
+![Slope field for the constant yield model](/2023-05-01/slope-field-constant-yield.png)
 
 ```r
 diff <- function(t, N) {
@@ -257,7 +260,7 @@ $$
 \frac{dN}{dt} = rN\left( 1 - \frac{N}{K} \right) - Y_0 = 0 \to \underbrace{rN\left( 1 - \frac{N}{K} \right)}_{\text{ls}} = \underbrace{Y_0}_{\text{rs}}
 $$
 
-![Finding equilibria for the constant effort model graphically](/src/content/blog/2023-05-01-harvesting-methods/resources/finding_equilibria_constant_effot_model_graphically.png)
+![Finding equilibria for the constant effort model graphically](/2023-05-01/finding_equilibria_constant_effot_model_graphically.png)
 
 ```r
 K <- 100

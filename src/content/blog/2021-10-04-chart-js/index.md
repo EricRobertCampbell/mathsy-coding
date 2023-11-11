@@ -66,7 +66,7 @@ The next reasonable step would be to create the HTML:
 
 We'll worry about the JavaScript and CSS later - for now we just want to ensure that the basics work. Opening up the page in your browser should display the following:
 
-![A contender for website of the year?](/src/content/blog/2021-10-04-chart-js/resources/website1.jpg)
+![A contender for website of the year?](/2021-10-04/website1.jpg)
 
 ### Getting, Massaging, and Incorporting the Data
 
@@ -663,7 +663,7 @@ window.onload = setup;
 
 If you look at the website again, it should now look as follows:
 
-![Display of condensed data on the website](/src/content/blog/2021-10-04-chart-js/resources/website2.jpg)
+![Display of condensed data on the website](/2021-10-04/website2.jpg)
 
 ### Loading in Chart.js
 
@@ -703,7 +703,7 @@ window.onload = setup
 
 Note that although the appearance of the website will not have changed, you should see an error if you open up the developer console:
 
-![Expected error: Failed to Create Chart](/src/content/blog/2021-10-04-chart-js/resources/expectedError.jpg)
+![Expected error: Failed to Create Chart](/2021-10-04/expectedError.jpg)
 
 This is expected - it is the result of not providing a place to actually render the new chart. We'll take care of that very soon!
 
@@ -765,7 +765,7 @@ window.onload = setup
 
 When you open up the website, you should see the following chart greet you:
 
-![Region against percentage fully vaccinated](/src/content/blog/2021-10-04-chart-js/resources/chart-1.png)
+![Region against percentage fully vaccinated](/2021-10-04/chart-1.png)
 
 In order to create this, we had to create a new `Chart` object. This chart is drawn into a canvas element though a 2D context, which is what we passed into the constructor as the first argument. The second argument specified what the chart should actually look like. In our case, we indicate that it is a bar graph, and that the labels (x axis) should be the local name while the value (y axis) should be the percentage vaccinated. Notice that `datasets` is an array - if we wanted we could specify multiple datasets and have them all displayed on the same set of axes.
 
@@ -821,7 +821,7 @@ For the colour we can be a little more creative. To make the graph a little easi
 
 And we immediately see a much nicer chart:
 
-![Region against vaccination rate, ordered and coloured](/src/content/blog/2021-10-04-chart-js/resources/chart-2.png)
+![Region against vaccination rate, ordered and coloured](/2021-10-04/chart-2.png)
 
 ## Scatter Plot
 
@@ -890,13 +890,13 @@ Looking at this (beautiful) chart, something that I noticed is that the regions 
 
 And again, a beautiful chart is the result:
 
-![Scatter plot of healh regions by population against vaccination percentage](/src/content/blog/2021-10-04-chart-js/resources/chart-3.png)
+![Scatter plot of healh regions by population against vaccination percentage](/2021-10-04/chart-3.png)
 
 Notice that the format for the data has changed - instead of just being a list of values (to match against the labels, as with the bar graph), we create a new object with its own $x$ and $y$ coordinates representing each point. This is the only data format which the scatter plot accepts.
 
 Again, while this is lovely, there is one problem that we'd like to solve: when you hover over a point, it just displays the coordinates! Ideally, we'd like to display the name of the region instead.
 
-![Pictured: a label which is not very helpful](/src/content/blog/2021-10-04-chart-js/resources/tooltip-bad.png)
+![Pictured: a label which is not very helpful](/2021-10-04/tooltip-bad.png)
 
 In order to control the displayed tooltip, we need to provide a callback function which will generate the label for each point. Unfortunately, at the moment the points don't have any information about which health region they come from - we'll have to add that into the data!
 
@@ -963,7 +963,7 @@ In order to control the displayed tooltip, we need to provide a callback functio
 
 Now when we hover over a point, we get a much more informative tooltip.
 
-![A tooltip which indicates the health region](/src/content/blog/2021-10-04-chart-js/resources/tooltip-good.png)
+![A tooltip which indicates the health region](/2021-10-04/tooltip-good.png)
 
 The callback function which we provided was provided a context object, which contains a wealth of information about the individual point and the graph itself. Included in that is the `raw` attribute, which is the data point itself. We amended our passed-in data with the `label` attribute, which is actually ignored by Chart.js. However, we were then able to grab that value in the callback and use it as the value of the labe displayed in the tooltip. As with everything else in Chart.js, there is a lot more that you could do with tooltips, and the [documentation is an excellent place to start](https://www.chartjs.org/docs/3.4.0/configuration/tooltip.html).
 
@@ -1136,7 +1136,7 @@ In order to explore that possibility, here's what we'll do. First, we'll calcula
 
 Which gives us the following chart:
 
-![Chart with confidence intervals](/src/content/blog/2021-10-04-chart-js/resources/chart-4.png)
+![Chart with confidence intervals](/2021-10-04/chart-4.png)
 
 If our assumptions were correct, we would expect 95% of the data to fit within the two black bands. Instead, almost none of it does! This lends some credence to our original idea that population size and vaccination rate are related, but of course there would be much more work to do to establish that.
 
@@ -1352,7 +1352,7 @@ window.onload = setup
 
 Which results in the following:
 
-![Website - Chart with selectable confidence intervals](/src/content/blog/2021-10-04-chart-js/resources/chart-5.png)
+![Website - Chart with selectable confidence intervals](/2021-10-04/chart-5.png)
 
 There's actually quite a bit going on here, so let's take a look at some of the highlights. First, we want to move the chart object out of the `setup` function, since it will now be changed in a few different places. In the `setup` function, we set the data for the confidence intervals to empty arrays - before the user selects it, we want it to be blank. We also created the `updateChart` function, which updates the chart data with the new confidence interval calculations and updates the chart using `chart.update()`. Finally, we add an event handler to the select element which we created in `index.html` so that changing the confidence interval updates the graph.
 

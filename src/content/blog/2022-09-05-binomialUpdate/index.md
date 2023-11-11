@@ -3,7 +3,10 @@ title: Simple Bayesian Update - Three Methods
 pubDate: 2022-09-05
 description: Solving a simply binomial update problem using a grid method, MCMC, and a conjugate prior
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+  - date: 2023-04-16
+    message: Changing image and file paths
+  - date: 2023-10-12
+    message: Changing picture and file paths
 ---
 
 ## Introduction
@@ -33,7 +36,7 @@ $$
 
 The actual numbers we choose somehow reflect our level of conviction. Visually, we can see this if we plot various beta distributions where the ratio of successes / trials is the same but the actual values are different:
 
-![Different Beta distributions reflecting different levels of certainty](/src/content/blog/2022-09-05-binomialUpdate/resources/differentBetas.png)
+![Different Beta distributions reflecting different levels of certainty](/2022-09-05/differentBetas.png)
 
 ```python
 import numpy as np
@@ -61,7 +64,7 @@ Thus, our choice of $\text{Beta}(3,2)$ indicates that I think that the value of 
 
 So now we can use our first method to approximate our final distribution of the propportion $p$ of water on the Earth's surface - a grid approximation. For this, we will evaluate our prior and likelihood at a number of potential values for $p$, and then multiply them together. If we choose a sufficiently large number of points, our approximation should be a good one!
 
-![Prior and posterior - grid approximation](/src/content/blog/2022-09-05-binomialUpdate/resources/grid.png)
+![Prior and posterior - grid approximation](/2022-09-05/grid.png)
 
 ```python
 import numpy as np
@@ -111,7 +114,7 @@ Where $k$ is the observed number of "water" hits (7), and $p$ is the true propor
 
 In order to construct our estimate, we will use [PyMC](https://www.pymc.io/welcome.html). We will write down our model almost exactly the way it appears above, run it, and sample from the results.
 
-![Markov Chain Monte Carlo Results](/src/content/blog/2022-09-05-binomialUpdate/resources/mcmc.png)
+![Markov Chain Monte Carlo Results](/2022-09-05/mcmc.png)
 
 ```python
 import numpy as np
@@ -210,7 +213,7 @@ From this result, we should be able to get the prior analytically:
 
 So the posterior should be $\text{Beta}(7 + 3, 10 - 7 + 2) = \text{Beta}(10, 5)$.
 
-![Using a conjugate prior](/src/content/blog/2022-09-05-binomialUpdate/resources/conjugatePrior.png)
+![Using a conjugate prior](/2022-09-05/conjugatePrior.png)
 
 ```python
 import numpy as np

@@ -3,7 +3,10 @@ title: How Quickly Did Tyrannosaurs Grow? Curve Fitting with SciPy
 pubDate: 2022-08-01
 description: How to use SciPy's curve_fit function to optimize function parameters
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+    - date: 2022-04-15
+      message: Changing picture and file paths
+    - date: "2023-10-12"
+      message: Changing picture and file paths
 ---
 
 ## Introduction
@@ -49,7 +52,7 @@ The data itself looks as follows:
 3,7.87498175608272
 ```
 
-![Initial Fake Linear Data](/src/content/blog/2022-08-01-curve-fitting/resources/linear_data.png)
+![Initial Fake Linear Data](/2022-08-01/linear_data.png)
 
 Now let's fit the data! The general shape of the `curve_fit` function is `curve_fit(f, xdata, ydata)`. Here, `f` is a callable (a function) which takes in an $x$ value as its first parameter and then the actual parameters to be fit as the others: `f(x, *params)`. What `curve_fit` is attempting to do is find the parameters which minimize the least-squares distance between `f(xdata, *params)` and `ydata`. Nominally, we expect `ydata = f(xdata, *params)`.
 
@@ -90,7 +93,7 @@ ax.legend()
 fig.savefig('fitted_linear_curve.jpg')
 ```
 
-![Linear Fit](/src/content/blog/2022-08-01-curve-fitting/resources/fitted_linear_curve.jpg)
+![Linear Fit](/2022-08-01/fitted_linear_curve.jpg)
 
 We can see that we are getting a good agreement between the actual function used to generate the data and what we extracted using curve fitting.
 
@@ -207,7 +210,7 @@ So, how do we ask the function to start the curve at these parameter values? We 
 -
 ```
 
-![Fitted Tyrannosaurus Growth Curve](/src/content/blog/2022-08-01-curve-fitting/resources/tyrannosaurus_growth_curve.jpg)
+![Fitted Tyrannosaurus Growth Curve](/2022-08-01/tyrannosaurus_growth_curve.jpg)
 
 Again, just by visually inspecting this we can see that this is a very reasonable regression curve for the data!
 
@@ -215,7 +218,7 @@ Again, just by visually inspecting this we can see that this is a very reasonabl
 
 This is pretty fantastic - we were very quickly and easily able to fit a curve to the data! Unfortunately, as you may have noticed, the parameters that we found are _not_ those found in the parper. In fact, we can plot the values that they gave against ours to see the difference:
 
-![Tyrannosaurus Growth Curve - Fitted Against Paper Parameters](/src/content/blog/2022-08-01-curve-fitting/resources/tyrannosaurus_growth_curve_with_paper.jpg)
+![Tyrannosaurus Growth Curve - Fitted Against Paper Parameters](/2022-08-01/tyrannosaurus_growth_curve_with_paper.jpg)
 
 ```python
  import numpy as np

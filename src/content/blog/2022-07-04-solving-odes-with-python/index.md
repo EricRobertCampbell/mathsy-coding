@@ -3,7 +3,10 @@ title: Solving Initial Value Problems Numerically in Python with SciPy
 pubDate: 2022-07-04
 description: Using SciPy's solve_ivp to solve initial value problems
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+  - date: 2023-04-16
+    message: Changing image and file paths
+  - date: 2023-10-12
+    message: Changing picture and file paths
 ---
 
 ## Introduction
@@ -82,7 +85,7 @@ We can see that there is a lot of additional information passed back, in additio
 
 However, just by staring at this it is not at all obvious that it is actually correct. Let's quickly plot this against the actual solution:
 
-![Numerical and exact solutions to df/dt = f(t), f(0) = 1](/src/content/blog/2022-07-04-solving-odes-with-python/resources/1dsystem.png)
+![Numerical and exact solutions to df/dt = f(t), f(0) = 1](/2022-07-04/1dsystem.png)
 
 ```python
 from scipy.integrate import solve_ivp
@@ -113,7 +116,7 @@ plt.savefig('1dsystem.png')
 
 From the graph, we can see that the agreement seems to be good. One oddity is that the numerical solution is only defined for five points over the interval, and by looking at the actual values of `results.t` they are not evenly spaced or anything like that. In fact, those particular points are automatically selected by `solve_ivp` in order to keep the accumulated error between the exact and numerical solutions below a certain threshold. However, we can control this in a variety of ways. The easiest is probably to set the `max_step` parameter, but another way would be to explicitly pass in a list of $t$ values at which to evaluate the system. I prefer the `max_step` option, since it leaves open the possibility that the step can be shorter for the case in which additional accurracy is needed when solving. To solve the system numerically and plot that solution with much shorter steps would look as follows:
 
-![Numerical Solution to df/dt = f(t), f(0) = 1](/src/content/blog/2022-07-04-solving-odes-with-python/resources/1dsystem-numerical.png)
+![Numerical Solution to df/dt = f(t), f(0) = 1](/2022-07-04/1dsystem-numerical.png)
 
 ```python
 from scipy.integrate import solve_ivp
@@ -191,7 +194,7 @@ plt.savefig('lotkavolterra.png')
 
 ```
 
-![Numerical solution to the Lotka-Volterra System](/src/content/blog/2022-07-04-solving-odes-with-python/resources/lotkavolterra.png)
+![Numerical solution to the Lotka-Volterra System](/2022-07-04/lotkavolterra.png)
 
 A few things to note:
 
@@ -241,7 +244,7 @@ plt.savefig('lorenz.png')
 
 ```
 
-![Phase space diagram of a numerical solution to the Lorenz system](/src/content/blog/2022-07-04-solving-odes-with-python/resources/lorenz.png)
+![Phase space diagram of a numerical solution to the Lorenz system](/2022-07-04/lorenz.png)
 
 ## Conclusion
 
