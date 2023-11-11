@@ -3,7 +3,10 @@ title: Inferring Extinction from Sighting Data
 pubDate: 2022-12-05
 description: Working through the details of Sorlow's 1993 paper "Inferring Extinction from Sighting Data"
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+    - date: 2023-04-16
+      message: Changing image and file paths
+    - date: 2023-10-12
+      message: Changing picture and file paths
 ---
 
 As part of my attempt to understand more about the papers I'm reading, I've decided to work through all of the calculations of some of them to see if I can reproduce them. Today, I'm going to take a look at a 1993 paper by Andrew Solow entitled "Inferring Extinction from Sighting Data". This paper is about how confident we can be in our belief that an animal has gone extinct, based on a previous record of sightings.
@@ -46,7 +49,7 @@ normalized_dates, T
 
     (array([ 0,  7, 17, 33, 37]), 77)
 
-![Timeline of Monk seal sightings](/src/content/blog/2022-12-05-inferring-extinction/resources/timeline.png)
+![Timeline of Monk seal sightings](/2022-12-05/timeline.png)
 
 ```python
 import numpy as np

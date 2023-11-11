@@ -3,7 +3,10 @@ title: Bayesian Ranking
 pubDate: 2022-10-03
 description: Developing a way to assess the quality of players given the results of the games that they play
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+    - date: 2023-04-16
+      message: Changing image and file paths}
+    - date: 2023-10-12
+      message: Changing picture and file paths
 ---
 
 The purpose of this is to construct some sort of ranking given a series of pairwise comparisons, as well as an extension where the data is presented not as a series of one-on-one contests, but as a ranked order instead.
@@ -18,7 +21,7 @@ $$
 
 Let's take a look at the graph:
 
-![The Logistic Curve](/src/content/blog/2022-10-03-ranking/resources/logistic_curve.png)
+![The Logistic Curve](/2022-10-03/logistic_curve.png)
 
 ```python
 import matplotlib.pyplot as plt
@@ -143,7 +146,7 @@ fig.savefig('initial_ranking.png', dpi=400)
 
     Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 7 seconds.
 
-![Results of recovering the initial player qualities](/src/content/blog/2022-10-03-ranking/resources/initial_ranking.png)
+![Results of recovering the initial player qualities](/2022-10-03/initial_ranking.png)
 
 From this, we can see that our model is doing a good job of finding the original values. It looks like our method works!
 
@@ -263,7 +266,7 @@ fig.savefig('ranking_from_ranked_data.png', dpi=400)
 
     Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 7 seconds.
 
-![Quality Results from Ranked Order](/src/content/blog/2022-10-03-ranking/resources/ranking_from_ranked_data.png)
+![Quality Results from Ranked Order](/2022-10-03/ranking_from_ranked_data.png)
 
 Once again, our model was able to recover the initial values with a high degree of fidelity, although the results are somewhat more dispersed around the true values then when we had the individual games.
 

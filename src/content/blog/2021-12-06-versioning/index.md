@@ -3,7 +3,10 @@ title: Automatic Versioning of JavaScript Projects
 pubDate: 2021-12-06
 description: How to create an automatic versioning system for JavaScript projects using Github Actions
 updates:
-	- {date: 2023-04-16, message: Changing image and file paths}
+  - date: 2023-04-16
+    message: Changing image and file paths
+  - date: 2023-10-12
+    message: Changing picture and file paths
 ---
 
 ## Introduction
@@ -277,13 +280,13 @@ git push
 
 If you now go to Github, you should be able to see that the Action ran successfully. Note how there is a new contributor - the Github Actions bot that we set up to push the changes!
 
-![An overview of the Actions tab](/src/content/blog/2021-12-06-versioning/resources/actions-1.png)
+![An overview of the Actions tab](/2021-12-06/actions-1.png)
 
-![Details of the actions](/src/content/blog/2021-12-06-versioning/resources/actions-2.png)
+![Details of the actions](/2021-12-06/actions-2.png)
 
-![More details](/src/content/blog/2021-12-06-versioning/resources/actions-3.png)
+![More details](/2021-12-06/actions-3.png)
 
-![Our new contributor](/src/content/blog/2021-12-06-versioning/resources/actions-4.png)
+![Our new contributor](/2021-12-06/actions-4.png)
 
 ## Dealing with protected branches
 
@@ -291,11 +294,11 @@ This version of our system works great! Unfortunately, it has a fairly significa
 
 First, let's protect this branch. On Github, go to Settings > Branches and add a branch protection rule. Make sure that the "Branch name pattern" (right at the top) is set to 'development'.
 
-![The project initially](/src/content/blog/2021-12-06-versioning/resources/branch-protection.png)
+![The project initially](/2021-12-06/branch-protection.png)
 
 Let's just add the "Require a Pull Request before merging" and within that, "Require approvals" protections. A little further down you'll see "Include administrators" - you must ensure that this is _not_ checked!
 
-![The protections we've put in place](/src/content/blog/2021-12-06-versioning/resources/branch-protection2.png)
+![The protections we've put in place](/2021-12-06/branch-protection2.png)
 
 Now let's see what happens. Let's try pushing a commit up to our development branch:
 
@@ -310,15 +313,15 @@ Note that you might need to `git pull` before all of that - remember that the up
 
 Now take a look at the Actions tab in Github. It's a disaster!
 
-![The action has failed](/src/content/blog/2021-12-06-versioning/resources/failed-push1.png)
+![The action has failed](/2021-12-06/failed-push1.png)
 
 The action itself failed.
 
-![The push failed](/src/content/blog/2021-12-06-versioning/resources/failed-push2.png)
+![The push failed](/2021-12-06/failed-push2.png)
 
 Looking in more detail, it looks like the versioning worked, it was just the final push back to development that failed.
 
-![Permissions error](/src/content/blog/2021-12-06-versioning/resources/failed-push3.png)
+![Permissions error](/2021-12-06/failed-push3.png)
 
 Looking even closer, we can see the issue - we just protected our branch so that it required a passing review, and that obviously didn't happen.
 
@@ -326,7 +329,7 @@ Here's where the fact that we left the "Include administrators" blank becomes im
 
 First, we'll need to create a PAT. As the name suggests, rather than being bound to a specific repository (as is the `GITHUB_TOKEN` we are currently using), this token is bound to, and has the same permissions as, the user who creates it. On Github, click on your avatar, then go to Settings > Developer settings > Personal access tokens, and click on `Generate new token`. Fill in a name to remind yourself of what it is for, then select an expiry time (you probably shouldn't do what I am in the screenshot and set a definite expiry instead), and select the "repo" scope for the token. Then click 'Generate token' and be sure to save the result!
 
-![Generating the PAT](/src/content/blog/2021-12-06-versioning/resources/PAT.png)
+![Generating the PAT](/2021-12-06/PAT.png)
 
 Now we need to add that token as a secret in our repository. In the repository itself, go to Settings > Secrets and add a new repository secret. Make sure to name it something memorable (I chose `VERSIONING_TOKEN`) and have as its value the PAT you just generated. From now on you can access it as part of actions with `${{secrets.VERSIONING_TOKEN}}`.
 

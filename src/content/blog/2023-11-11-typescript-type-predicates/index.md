@@ -29,7 +29,7 @@ const names = relevantUsers.map(user => user.name);
 
 Much to my surprise, that didn't work! Despite my filtering out the `undefined` elements in the array, TypeScript continued to complain that the elements of `relevantUsers` could be `undefined`!
 
-![The code above, showing an error 'user could be undefined'](/src/content/blog/2023-11-11-typescript-type-predicates/typescript1.png)
+![The code above, showing an error 'user could be undefined'](/2023-11-11/typescript1.png)
 
 ## The Solution - Type Predicates
 
