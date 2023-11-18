@@ -270,6 +270,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2023-11-18-sorting-in-python/index.md": {
+  id: "2023-11-18-sorting-in-python/index.md",
+  slug: "2023-11-18-sorting-in-python",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
