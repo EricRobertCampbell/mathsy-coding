@@ -277,6 +277,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2023-12-04-ci-means-large-sample-size/index.md": {
+  id: "2023-12-04-ci-means-large-sample-size/index.md",
+  slug: "2023-12-04-ci-means-large-sample-size",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
