@@ -298,6 +298,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2024-03-04-ci-means-bayesian/index.md": {
+  id: "2024-03-04-ci-means-bayesian/index.md",
+  slug: "2024-03-04-ci-means-bayesian",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
