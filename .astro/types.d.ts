@@ -298,6 +298,20 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2024-04-01-mean-differences-r/index.md": {
+  id: "2024-04-01-mean-differences-r/index.md",
+  slug: "2024-04-01-mean-differences-r",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
+"2024-05-06-hypothesis-testing-means/index.md": {
+  id: "2024-05-06-hypothesis-testing-means/index.md",
+  slug: "2024-05-06-hypothesis-testing-means",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
