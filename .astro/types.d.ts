@@ -312,6 +312,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2024-06-03-effect-size-determination/index.md": {
+  id: "2024-06-03-effect-size-determination/index.md",
+  slug: "2024-06-03-effect-size-determination",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
