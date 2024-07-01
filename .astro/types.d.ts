@@ -319,6 +319,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2024-07-01-saitta-et-al/index.md": {
+  id: "2024-07-01-saitta-et-al/index.md",
+  slug: "2024-07-01-saitta-et-al",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
