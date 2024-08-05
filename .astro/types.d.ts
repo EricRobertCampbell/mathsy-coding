@@ -326,6 +326,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2024-08-05-sexual-dimorphism/index.md": {
+  id: "2024-08-05-sexual-dimorphism/index.md",
+  slug: "2024-08-05-sexual-dimorphism",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
