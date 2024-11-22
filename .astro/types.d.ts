@@ -333,6 +333,13 @@ declare module 'astro:content' {
   collection: "blog",
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] },
+"2024-12-02-hierarchical-bayesian-models/index.md": {
+  id: "2024-12-02-hierarchical-bayesian-models/index.md",
+  slug: "2024-12-02-hierarchical-bayesian-models",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] },
 },
 
 	};
